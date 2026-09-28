@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FormWheel Chat</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,"Noto Sans KR",sans-serif;
+  background:#f7f8fc;
+  color:#222;
+  height:100vh;
+  overflow:hidden;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+.header{
+  height:64px;
+  background:#fff;
+  border-bottom:1px solid #e7e8ee;
+  display:flex;
+  align-items:center;
+  padding:0 22px;
+  justify-content:space-between;
+  position:relative;
+  z-index:10;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+  text-decoration:none;
+  color:#111;
+}
+
+.logo span{
+  display:inline-flex;
+  width:28px;
+  height:28px;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  margin:0 4px;
+  font-size:14px;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.user-name{
+  font-size:14px;
+  color:#555;
+}
+
+.status-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#35c759;
+}
+
+.app{
+  height:calc(100vh - 64px);
+  display:flex;
+  max-width:1450px;
+  margin:auto;
+  background:#fff;
+}
+
+.sidebar{
+  width:290px;
+  border-right:1px solid #e7e8ee;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+}
+
+.sidebar-top{
+  padding:18px;
+  border-bottom:1px solid #eee;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#111;
+  color:#fff;
+  font-weight:bold;
+}
+
+.profile-name{
+  font-weight:700;
+}
+
+.profile-sub{
+  font-size:12px;
+  color:#888;
+  margin-top:3px;
+}
+
+.side-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.side-buttons button{
+  padding:11px 7px;
+  border-radius:10px;
+  background:#f2f3f7;
+  color:#333;
+}
+
+.side-buttons button:hover{
+  background:#e7e9ef;
+}
+
+.chat-list{
+  overflow:auto;
+  flex:1;
+}
+
+.chat-item{
+  padding:14px 17px;
+  border-bottom:1px solid #f0f0f3;
+  display:flex;
+  gap:11px;
+  cursor:pointer;
+}
+
+.chat-item:hover{
+  background:#f7f8fc;
+}
+
+.chat-item.active{
+  background:#eef1f7;
+}
+
+.chat-icon{
+  width:40px;
+  height:40px;
+  flex:none;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#eef0f5;
+  font-size:19px;
+}
+
+.chat-info{
+  min-width:0;
+  flex:1;
+}
+
+.chat-title{
+  font-weight:700;
+  font-size:14px;
+}
+
+.chat-preview{
+  color:#888;
+  font-size:12px;
+  margin-top:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.chat-header{
+  height:70px;
+  padding:0 23px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #eee;
+}
+
+.chat-header-title{
+  font-weight:800;
+  font-size:18px;
+}
+
+.chat-header-sub{
+  color:#888;
+  font-size:12px;
+  margin-top:4px;
+}
+
+.header-actions{
+  display:flex;
+  gap:7px;
+}
+
+.small-btn{
+  background:#f1f2f6;
+  padding:8px 11px;
+  border-radius:9px;
+  font-size:13px;
+}
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:25px;
+  background:#fafbfe;
+}
+
+.empty{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#999;
+  text-align:center;
+}
+
+.message{
+  display:flex;
+  gap:9px;
+  margin-bottom:17px;
+  align-items:flex-end;
+}
+
+.message.mine{
+  justify-content:flex-end;
+}
+
+.message-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  flex:none;
+}
+
+.message-content{
+  max-width:min(70%,620px);
+}
+
+.sender{
+  font-size:11px;
+  color:#777;
+  margin-bottom:4px;
+}
+
+.bubble-row{
+  display:flex;
+  align-items:flex-end;
+  gap:5px;
+}
+
+.message.mine .bubble-row{
+  flex-direction:row-reverse;
+}
+
+.bubble{
+  padding:10px 13px;
+  background:#fff;
+  border:1px solid #e4e5ea;
+  border-radius:15px;
+  line-height:1.45;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.message.mine .bubble{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.time{
+  font-size:10px;
+  color:#aaa;
+  white-space:nowrap;
+}
+
+.chat-input-area{
+  border-top:1px solid #e5e5e9;
+  background:#fff;
+  padding:12px 15px;
+}
+
+.typing{
+  height:17px;
+  font-size:11px;
+  color:#999;
+  padding-left:5px;
+}
+
+.input-row{
+  display:flex;
+  gap:8px;
+  align-items:flex-end;
+}
+
+.emoji-btn{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  background:#f0f1f5;
+  font-size:21px;
+}
+
+.message-input{
+  flex:1;
+  resize:none;
+  min-height:43px;
+  max-height:120px;
+  border:1px solid #dddfe6;
+  border-radius:13px;
+  padding:11px 13px;
+  outline:none;
+}
+
+.message-input:focus{
+  border-color:#999;
+}
+
+.send-btn{
+  height:43px;
+  padding:0 18px;
+  background:#111;
+  color:#fff;
+  border-radius:12px;
+  font-weight:700;
+}
+
+.emoji-panel{
+  display:none;
+  padding:10px;
+  margin-bottom:8px;
+  background:#f7f8fc;
+  border:1px solid #e5e6eb;
+  border-radius:13px;
+  grid-template-columns:repeat(10,1fr);
+  gap:5px;
+}
+
+.emoji-panel.show{
+  display:grid;
+}
+
+.emoji-panel button{
+  background:#fff;
+  border-radius:8px;
+  padding:7px 3px;
+  font-size:21px;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(440px,100%);
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+}
+
+.modal-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.modal input{
+  width:100%;
+  border:1px solid #dddfe5;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+  outline:none;
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
+.modal-actions button{
+  padding:10px 14px;
+  border-radius:10px;
+}
+
+.primary{
+  background:#111;
+  color:#fff;
+}
+
+.secondary{
+  background:#eeeef2;
+}
+
+.user-results{
+  max-height:220px;
+  overflow:auto;
+}
+
+.user-result{
+  padding:11px;
+  border-radius:10px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.user-result:hover{
+  background:#f3f4f7;
+}
+
+.code-box{
+  text-align:center;
+}
+
+.room-code{
+  font-size:32px;
+  font-weight:900;
+  letter-spacing:8px;
+  margin:16px 0;
+}
+
+.notice{
+  font-size:12px;
+  color:#888;
+  line-height:1.5;
+}
+
+@media(max-width:760px){
+  .sidebar{
+    width:72px;
+  }
+
+  .sidebar-top{
+    padding:10px;
+  }
+
+  .profile{
+    justify-content:center;
+  }
+
+  .profile > div:not(.avatar),
+  .side-buttons button span,
+  .chat-info{
+    display:none;
+  }
+
+  .side-buttons{
+    display:block;
+  }
+
+  .side-buttons button{
+    width:100%;
+    margin-bottom:7px;
+    font-size:18px;
+  }
+
+  .chat-item{
+    justify-content:center;
+    padding:12px 5px;
+  }
+
+  .chat-icon{
+    width:43px;
+    height:43px;
+  }
+
+  .message-content{
+    max-width:82%;
+  }
+
+  .chat-header{
+    padding:0 13px;
+  }
+
+  .messages{
+    padding:16px 12px;
+  }
+
+  .user-name{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <a class="logo" href="https://semicolonxss.github.io/Formwheel/">
+    Form<span>◉</span>Wheel
+  </a>
+
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <div id="headerUserName" class="user-name">접속 중</div>
+  </div>
+</header>
+
+<div class="app">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-top">
+
+      <div class="profile">
+        <div class="avatar" id="myAvatar">?</div>
+
+        <div>
+          <div class="profile-name" id="myName">사용자</div>
+          <div class="profile-sub">온라인</div>
+        </div>
+      </div>
+
+      <div class="side-buttons">
+        <button onclick="openRoomModal()">➕ <span>방 만들기</span></button>
+        <button onclick="joinRoomModal()">🔑 <span>코드 입장</span></button>
+        <button onclick="openPrivateModal()">👤 <span>개인톡</span></button>
+        <button onclick="openChatGPT()">🤖 <span>ChatGPT</span></button>
+      </div>
+
+    </div>
+
+    <div class="chat-list">
+
+      <div class="chat-item active" id="publicChatItem" onclick="openPublicChat()">
+        <div class="chat-icon">🌐</div>
+        <div class="chat-info">
+          <div class="chat-title">전체 채팅</div>
+          <div class="chat-preview">FormWheel 전체 단톡방</div>
+        </div>
+      </div>
+
+      <div id="roomList"></div>
+
+      <div id="privateList"></div>
+
+      <div class="chat-item" onclick="openChatGPT()">
+        <div class="chat-icon">🤖</div>
+        <div class="chat-info">
+          <div class="chat-title">ChatGPT</div>
+          <div class="chat-preview">AI와 대화하기</div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="chat-header">
+      <div>
+        <div class="chat-header-title" id="chatTitle">🌐 전체 채팅</div>
+        <div class="chat-header-sub" id="chatSubtitle">모두가 참여할 수 있는 채팅방</div>
+      </div>
+
+      <div class="header-actions">
+        <button class="small-btn" onclick="copyRoomCode()">📋 코드</button>
+        <button class="small-btn" onclick="clearLocalChat()">🗑️</button>
+      </div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="empty">
+        <div>
+          <div style="font-size:42px">💬</div>
+          <div>채팅을 시작해보세요!</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+
+      <div class="typing" id="typingText"></div>
+
+      <div class="emoji-panel" id="emojiPanel"></div>
+
+      <div class="input-row">
+
+        <button class="emoji-btn" onclick="toggleEmoji()">😀</button>
+
+        <textarea
+          id="messageInput"
+          class="message-input"
+          placeholder="메시지를 입력하세요..."
+          rows="1"
+        ></textarea>
+
+        <button class="send-btn" onclick="sendCurrentMessage()">전송</button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- 방 만들기 -->
+<div class="modal" id="roomModal">
+  <div class="modal-box">
+
+    <div class="modal-title">➕ 채팅방 만들기</div>
+
+    <input id="roomNameInput" placeholder="채팅방 이름">
+
+    <div class="notice">
+      생성하면 다른 사람에게 4자리 코드를 알려주어 초대할 수 있습니다.
+    </div>
+
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModals()">취소</button>
+      <button class="primary" onclick="createRoom()">만들기</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- 코드 입장 -->
+<div class="modal" id="joinModal">
+  <div class="modal-box">
+
+    <div class="modal-title">🔑 코드로 입장</div>
+
+    <input
+      id="joinCodeInput"
+      maxlength="4"
+      inputmode="numeric"
+      placeholder="4자리 코드"
+    >
+
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModals()">취소</button>
+      <button class="primary" onclick="joinRoom()">입장</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- 개인톡 -->
+<div class="modal" id="privateModal">
+  <div class="modal-box">
+
+    <div class="modal-title">👤 개인톡</div>
+
+    <input
+      id="userSearchInput"
+      placeholder="닉네임 검색"
+      oninput="searchUsers()"
+    >
+
+    <div class="user-results" id="userResults"></div>
+
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModals()">닫기</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- 생성된 방 코드 -->
+<div class="modal" id="codeModal">
+  <div class="modal-box code-box">
+
+    <div class="modal-title">🎉 채팅방 생성 완료!</div>
+
+    <div>친구에게 이 코드를 알려주세요.</div>
+
+    <div class="room-code" id="generatedCode">0000</div>
+
+    <div class="notice">
+      코드로 입장하면 같은 채팅방에서 실시간으로 대화할 수 있습니다.
+    </div>
+
+    <div class="modal-actions">
+      <button class="secondary" onclick="copyGeneratedCode()">📋 복사</button>
+      <button class="primary" onclick="closeModals()">확인</button>
+    </div>
+
+  </div>
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  get,
+  update,
+  remove,
+  onValue,
+  onDisconnect,
+  query,
+  orderByChild,
+  limitToLast
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-functions.js";
+
+
+/* =========================
+   Firebase
+========================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBreTSe1m0-xlbF4aupnU5isRZCihR25IE",
+  authDomain: "formwheel.firebaseapp.com",
+  databaseURL: "https://formwheel-default-rtdb.firebaseio.com",
+  projectId: "formwheel",
+  storageBucket: "formwheel.firebasestorage.app",
+  messagingSenderId: "431583088241",
+  appId: "1:431583088241:web:74e0e34ea1e3e1170c55d0",
+  measurementId: "G-T372YXDF8D"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+const functions = getFunctions(app, "us-central1");
+
+
+/* =========================
+   State
+========================= */
+
+let currentUser = null;
+let nickname = localStorage.getItem("fw_chat_nickname") || "";
+
+let currentChatType = "public";
+let currentChatId = "public";
+
+let currentRoomCode = null;
+
+let messageListener = null;
+let typingTimer = null;
+
+let privateChats = {};
+let joinedRooms = {};
+
+
+/* =========================
+   Emoji
+========================= */
+
+const emojis = [
+  "😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇",
+  "🙂","🙃","😉","😌","😍","🥰","😘","😎","🤩","🥳",
+  "😮","😲","🥹","😭","😢","😡","🤬","😱","🤔","🤨",
+  "👍","👎","👏","🙌","🙏","💪","🔥","❤️","💖","💯",
+  "🎉","🎊","✨","⭐","🌟","💥","💬","🤖","👀","🚀"
+];
+
+const emojiPanel = document.getElementById("emojiPanel");
+
+emojis.forEach(e => {
+  const button = document.createElement("button");
+  button.textContent = e;
+  button.onclick = () => {
+    insertEmoji(e);
+  };
+  emojiPanel.appendChild(button);
+});
+
+
+window.toggleEmoji = function(){
+  emojiPanel.classList.toggle("show");
+};
+
+function insertEmoji(emoji){
+  const input = document.getElementById("messageInput");
+
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+
+  input.value =
+    input.value.substring(0,start) +
+    emoji +
+    input.value.substring(end);
+
+  input.focus();
+
+  input.selectionStart =
+  input.selectionEnd =
+    start + emoji.length;
+}
+
+
+/* =========================
+   Login
+========================= */
+
+async function start(){
+
+  try{
+    await signInAnonymously(auth);
+  }catch(error){
+    console.error(error);
+    alert("Firebase 익명 로그인을 활성화해주세요.");
+  }
+
+}
+
+start();
+
+
+onAuthStateChanged(auth, async user => {
+
+  if(!user) return;
+
+  currentUser = user;
+
+  if(!nickname){
+
+    nickname =
+      prompt("FormWheel Chat에서 사용할 닉네임을 입력해주세요.") ||
+      "사용자" + Math.floor(Math.random()*10000);
+
+    nickname = nickname.trim().slice(0,12);
+
+    localStorage.setItem("fw_chat_nickname",nickname);
+  }
+
+  updateProfileUI();
+
+  const userRef = ref(db,"chatUsers/"+currentUser.uid);
+
+  await set(userRef,{
+    nickname,
+    online:true,
+    lastSeen:Date.now()
+  });
+
+  onDisconnect(userRef).update({
+    online:false,
+    lastSeen:Date.now()
+  });
+
+  loadUsers();
+  loadJoinedRooms();
+  loadPrivateChats();
+
+  openPublicChat();
+});
+
+
+function updateProfileUI(){
+
+  document.getElementById("myName").textContent = nickname;
+  document.getElementById("headerUserName").textContent = nickname;
+
+  document.getElementById("myAvatar").textContent =
+    nickname.charAt(0).toUpperCase();
+}
+
+
+/* =========================
+   Public Chat
+========================= */
+
+window.openPublicChat = function(){
+
+  currentChatType = "public";
+  currentChatId = "public";
+  currentRoomCode = null;
+
+  document.getElementById("chatTitle").textContent =
+    "🌐 전체 채팅";
+
+  document.getElementById("chatSubtitle").textContent =
+    "모두가 참여할 수 있는 채팅방";
+
+  setActiveItem("publicChatItem");
+
+  listenMessages(
+    ref(db,"chat/public/messages")
+  );
+};
+
+
+async function sendMessage(path,text){
+
+  if(!currentUser) return;
+
+  text = text.trim();
+
+  if(!text) return;
+
+  const messagesRef = ref(db,path);
+
+  await push(messagesRef,{
+    uid:currentUser.uid,
+    nickname,
+    text,
+    timestamp:Date.now()
+  });
+}
+
+
+/* =========================
+   Send
+========================= */
+
+window.sendCurrentMessage = async function(){
+
+  const input =
+    document.getElementById("messageInput");
+
+  const text = input.value.trim();
+
+  if(!text) return;
+
+  input.value = "";
+
+  stopTyping();
+
+  if(currentChatType === "chatgpt"){
+
+    addLocalMessage("user",nickname,text);
+
+    await askChatGPT(text);
+
+    return;
+  }
+
+  if(currentChatType === "public"){
+
+    await sendMessage(
+      "chat/public/messages",
+      text
+    );
+
+  }else if(currentChatType === "room"){
+
+    await sendMessage(
+      "chat/rooms/"+currentChatId+"/messages",
+      text
+    );
+
+  }else if(currentChatType === "private"){
+
+    await sendMessage(
+      "chat/private/"+currentChatId+"/messages",
+      text
+    );
+  }
+
+};
+
+
+document.getElementById("messageInput")
+.addEventListener("keydown",e=>{
+
+  if(e.key==="Enter" && !e.shiftKey){
+
+    e.preventDefault();
+
+    sendCurrentMessage();
+
+  }
+
+});
+
+
+document.getElementById("messageInput")
+.addEventListener("input",()=>{
+
+  if(currentChatType==="chatgpt") return;
+
+  setTyping();
+
+});
+
+
+/* =========================
+   Message listener
+========================= */
+
+function listenMessages(messageRef){
+
+  if(messageListener){
+
+    messageListener();
+    messageListener=null;
+  }
+
+  const messages = document.getElementById("messages");
+
+  messages.innerHTML = "";
+
+  const q = query(
+    messageRef,
+    orderByChild("timestamp"),
+    limitToLast(200)
+  );
+
+  messageListener =
+    onValue(q,snapshot=>{
+
+      messages.innerHTML="";
+
+      if(!snapshot.exists()){
+
+        messages.innerHTML = `
+          <div class="empty">
+            아직 메시지가 없습니다.<br>
+            첫 메시지를 보내보세요! 👋
+          </div>
+        `;
+
+        return;
+      }
+
+      const data = snapshot.val();
+
+      Object.entries(data).forEach(([id,msg])=>{
+
+        renderMessage(
+          msg,
+          id,
+          messageRef
+        );
+
+      });
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    });
+
+}
+
+
+/* =========================
+   Render
+========================= */
+
+function renderMessage(msg,id,messageRef){
+
+  const messages =
+    document.getElementById("messages");
+
+  const mine =
+    msg.uid === currentUser?.uid;
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "message" + (mine ? " mine" : "");
+
+  const time =
+    new Date(msg.timestamp || Date.now())
+    .toLocaleTimeString("ko-KR",{
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+
+  wrapper.innerHTML = `
+
+    ${mine ? "" : `
+      <div class="message-avatar">
+        ${(msg.nickname || "?").charAt(0)}
+      </div>
+    `}
+
+    <div class="message-content">
+
+      ${mine ? "" : `
+        <div class="sender">
+          ${escapeHtml(msg.nickname || "사용자")}
+        </div>
+      `}
+
+      <div class="bubble-row">
+
+        <div class="bubble">
+          ${escapeHtml(msg.text || "")}
+        </div>
+
+        <div class="time">
+          ${time}
+        </div>
+
+      </div>
+
+      ${mine ? `
+        <button
+          style="
+            background:none;
+            color:#aaa;
+            font-size:10px;
+            margin-top:3px;
+          "
+          onclick="deleteMessage('${messageRef.toString()}','${id}')"
+        >
+          삭제
+        </button>
+      ` : ""}
+
+    </div>
+  `;
+
+  messages.appendChild(wrapper);
+}
+
+
+window.deleteMessage =
+async function(path,id){
+
+  if(!confirm("이 메시지를 삭제할까요?"))
+    return;
+
+  await remove(
+    ref(db,path+"/"+id)
+  );
+
+};
+
+
+/* =========================
+   Rooms
+========================= */
+
+window.openRoomModal = function(){
+
+  document.getElementById("roomModal")
+  .classList.add("show");
+
+};
+
+
+window.joinRoomModal = function(){
+
+  document.getElementById("joinModal")
+  .classList.add("show");
+
+};
+
+
+window.createRoom = async function(){
+
+  const name =
+    document.getElementById("roomNameInput")
+    .value.trim();
+
+  if(!name){
+
+    alert("채팅방 이름을 입력해주세요.");
+    return;
+
+  }
+
+  let code;
+
+  while(true){
+
+    code =
+      String(Math.floor(1000+Math.random()*9000));
+
+    const snap =
+      await get(ref(db,"chat/rooms"));
+
+    const rooms =
+      snap.val() || {};
+
+    const exists =
+      Object.values(rooms)
+      .some(r=>r.code===code);
+
+    if(!exists) break;
+
+  }
+
+  const roomRef =
+    push(ref(db,"chat/rooms"));
+
+  await set(roomRef,{
+
+    name,
+    code,
+
+    owner:currentUser.uid,
+
+    createdAt:Date.now(),
+
+    members:{
+      [currentUser.uid]:true
+    }
+
+  });
+
+  joinedRooms[roomRef.key]={
+    name,
+    code
+  };
+
+  saveJoinedRooms();
+
+  document.getElementById("generatedCode")
+  .textContent = code;
+
+  closeModals();
+
+  document.getElementById("codeModal")
+  .classList.add("show");
+
+  openRoom(roomRef.key,name,code);
+
+};
+
+
+window.joinRoom = async function(){
+
+  let code =
+    document.getElementById("joinCodeInput")
+    .value.trim();
+
+  if(!/^\d{4}$/.test(code)){
+
+    alert("4자리 숫자 코드를 입력해주세요.");
+    return;
+
+  }
+
+  const snap =
+    await get(ref(db,"chat/rooms"));
+
+  const rooms =
+    snap.val() || {};
+
+  let foundId=null;
+  let foundRoom=null;
+
+  Object.entries(rooms).forEach(([id,room])=>{
+
+    if(room.code===code){
+
+      foundId=id;
+      foundRoom=room;
+
+    }
+
+  });
+
+  if(!foundRoom){
+
+    alert("존재하지 않는 채팅방 코드입니다.");
+    return;
+
+  }
+
+  await update(
+    ref(db,"chat/rooms/"+foundId+"/members"),
+    {
+      [currentUser.uid]:true
+    }
+  );
+
+  joinedRooms[foundId]={
+    name:foundRoom.name,
+    code:foundRoom.code
+  };
+
+  saveJoinedRooms();
+
+  closeModals();
+
+  openRoom(
+    foundId,
+    foundRoom.name,
+    foundRoom.code
+  );
+
+};
+
+
+function openRoom(id,name,code){
+
+  currentChatType="room";
+  currentChatId=id;
+  currentRoomCode=code;
+
+  document.getElementById("chatTitle")
+    .textContent="👥 "+name;
+
+  document.getElementById("chatSubtitle")
+    .textContent="입장 코드: "+code;
+
+  setActiveItem("room-"+id);
+
+  listenMessages(
+    ref(db,"chat/rooms/"+id+"/messages")
+  );
+
+}
+
+
+function loadJoinedRooms(){
+
+  const saved =
+    localStorage.getItem("fw_chat_rooms");
+
+  if(saved){
+
+    try{
+      joinedRooms=JSON.parse(saved);
+    }catch{}
+
+  }
+
+  renderRooms();
+
+}
+
+
+function saveJoinedRooms(){
+
+  localStorage.setItem(
+    "fw_chat_rooms",
+    JSON.stringify(joinedRooms)
+  );
+
+  renderRooms();
+
+}
+
+
+function renderRooms(){
+
+  const list =
+    document.getElementById("roomList");
+
+  list.innerHTML="";
+
+  Object.entries(joinedRooms)
+  .forEach(([id,room])=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className="chat-item";
+    item.id="room-"+id;
+
+    item.innerHTML=`
+
+      <div class="chat-icon">👥</div>
+
+      <div class="chat-info">
+
+        <div class="chat-title">
+          ${escapeHtml(room.name)}
+        </div>
+
+        <div class="chat-preview">
+          코드 ${room.code}
+        </div>
+
+      </div>
+    `;
+
+    item.onclick=()=>{
+      openRoom(
+        id,
+        room.name,
+        room.code
+      );
+    };
+
+    list.appendChild(item);
+
+  });
+
+}
+
+
+/* =========================
+   Private Chat
+========================= */
+
+window.openPrivateModal = function(){
+
+  document.getElementById("privateModal")
+    .classList.add("show");
+
+  searchUsers();
+
+};
+
+
+function loadUsers(){
+
+  onValue(
+    ref(db,"chatUsers"),
+    snapshot=>{
+
+      window.allChatUsers =
+        snapshot.val() || {};
+
+    }
+  );
+
+}
+
+
+window.searchUsers = function(){
+
+  const keyword =
+    document.getElementById("userSearchInput")
+    .value.trim().toLowerCase();
+
+  const result =
+    document.getElementById("userResults");
+
+  result.innerHTML="";
+
+  const users =
+    window.allChatUsers || {};
+
+  Object.entries(users)
+  .filter(([uid,user])=>{
+
+    if(uid===currentUser?.uid)
+      return false;
+
+    return !keyword ||
+      (user.nickname || "")
+      .toLowerCase()
+      .includes(keyword);
+
+  })
+  .slice(0,30)
+  .forEach(([uid,user])=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className="user-result";
+
+    item.innerHTML=`
+
+      <div class="avatar" style="width:35px;height:35px">
+        ${(user.nickname || "?").charAt(0)}
+      </div>
+
+      <div>
+        <b>${escapeHtml(user.nickname)}</b>
+        <div style="font-size:11px;color:#999">
+          ${user.online ? "🟢 온라인" : "⚪ 오프라인"}
+        </div>
+      </div>
+    `;
+
+    item.onclick=()=>{
+      openPrivateChat(uid,user.nickname);
+    };
+
+    result.appendChild(item);
+
+  });
+
+};
+
+
+function makePrivateId(a,b){
+
+  return [a,b].sort().join("_");
+
+}
+
+
+async function openPrivateChat(uid,name){
+
+  const chatId =
+    makePrivateId(
+      currentUser.uid,
+      uid
+    );
+
+  await set(
+    ref(db,"chat/private/"+chatId+"/members"),
+    {
+      [currentUser.uid]:true,
+      [uid]:true
+    }
+  );
+
+  privateChats[chatId]={
+    uid,
+    name
+  };
+
+  savePrivateChats();
+
+  closeModals();
+
+  currentChatType="private";
+  currentChatId=chatId;
+
+  document.getElementById("chatTitle")
+    .textContent="👤 "+name;
+
+  document.getElementById("chatSubtitle")
+    .textContent="개인톡";
+
+  setActiveItem("private-"+chatId);
+
+  listenMessages(
+    ref(db,"chat/private/"+chatId+"/messages")
+  );
+
+}
+
+
+function loadPrivateChats(){
+
+  const saved =
+    localStorage.getItem(
+      "fw_chat_private"
+    );
+
+  if(saved){
+
+    try{
+      privateChats=JSON.parse(saved);
+    }catch{}
+
+  }
+
+  renderPrivateChats();
+
+}
+
+
+function savePrivateChats(){
+
+  localStorage.setItem(
+    "fw_chat_private",
+    JSON.stringify(privateChats)
+  );
+
+  renderPrivateChats();
+
+}
+
+
+function renderPrivateChats(){
+
+  const list =
+    document.getElementById("privateList");
+
+  list.innerHTML="";
+
+  Object.entries(privateChats)
+  .forEach(([id,chat])=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className="chat-item";
+    item.id="private-"+id;
+
+    item.innerHTML=`
+
+      <div class="chat-icon">👤</div>
+
+      <div class="chat-info">
+
+        <div class="chat-title">
+          ${escapeHtml(chat.name)}
+        </div>
+
+        <div class="chat-preview">
+          개인톡
+        </div>
+
+      </div>
+    `;
+
+    item.onclick=()=>{
+      openPrivateChat(
+        chat.uid,
+        chat.name
+      );
+    };
+
+    list.appendChild(item);
+
+  });
+
+}
+
+
+/* =========================
+   ChatGPT
+========================= */
+
+window.openChatGPT = function(){
+
+  currentChatType="chatgpt";
+  currentChatId="chatgpt";
+
+  document.getElementById("chatTitle")
+    .textContent="🤖 ChatGPT";
+
+  document.getElementById("chatSubtitle")
+    .textContent="FormWheel AI Chat";
+
+  setActiveItem("chatGPTItem");
+
+  const messages =
+    document.getElementById("messages");
+
+  messages.innerHTML=`
+
+    <div class="message">
+
+      <div class="message-avatar">🤖</div>
+
+      <div class="message-content">
+
+        <div class="sender">
+          ChatGPT
+        </div>
+
+        <div class="bubble-row">
+
+          <div class="bubble">
+            안녕하세요! 👋<br>
+            FormWheel Chat의 ChatGPT입니다.<br>
+            궁금한 것을 물어보세요!
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+};
+
+
+async function askChatGPT(text){
+
+  const messages =
+    document.getElementById("messages");
+
+  const loading =
+    document.createElement("div");
+
+  loading.className="message";
+
+  loading.innerHTML=`
+
+    <div class="message-avatar">🤖</div>
+
+    <div class="message-content">
+
+      <div class="sender">
+        ChatGPT
+      </div>
+
+      <div class="bubble-row">
+
+        <div class="bubble">
+          생각하는 중... 🤔
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+  messages.appendChild(loading);
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+  try{
+
+    const chatFunction =
+      httpsCallable(
+        functions,
+        "chatWithGPT"
+      );
+
+    const result =
+      await chatFunction({
+        message:text
+      });
+
+    loading.remove();
+
+    addLocalMessage(
+      "assistant",
+      "ChatGPT",
+      result.data.reply
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    loading.remove();
+
+    addLocalMessage(
+      "assistant",
+      "ChatGPT",
+      "⚠️ ChatGPT 연결에 실패했습니다.\nFirebase Function 배포와 OpenAI API 설정을 확인해주세요."
+    );
+
+  }
+
+}
+
+
+function addLocalMessage(
+  type,
+  name,
+  text
+){
+
+  const messages =
+    document.getElementById("messages");
+
+  const wrapper =
+    document.createElement("div");
+
+  const mine =
+    type==="user";
+
+  wrapper.className =
+    "message" + (mine ? " mine":"");
+
+  wrapper.innerHTML=`
+
+    ${mine ? "" :
+      `<div class="message-avatar">🤖</div>`
+    }
+
+    <div class="message-content">
+
+      ${mine ? "" :
+        `<div class="sender">
+          ${escapeHtml(name)}
+        </div>`
+      }
+
+      <div class="bubble-row">
+
+        <div class="bubble">
+          ${escapeHtml(text)}
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+  messages.appendChild(wrapper);
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+
+/* =========================
+   Typing
+========================= */
+
+function getTypingRef(){
+
+  return ref(
+    db,
+    "typing/"+currentChatType+"/"+currentChatId
+  );
+
+}
+
+
+function setTyping(){
+
+  if(!currentUser) return;
+
+  set(
+    ref(
+      db,
+      "typing/"+currentChatType+"/"+currentChatId+
+      "/"+currentUser.uid
+    ),
+    {
+      nickname,
+      timestamp:Date.now()
+    }
+  );
+
+  clearTimeout(typingTimer);
+
+  typingTimer =
+    setTimeout(stopTyping,1500);
+
+}
+
+
+function stopTyping(){
+
+  if(!currentUser) return;
+
+  remove(
+    ref(
+      db,
+      "typing/"+currentChatType+"/"+currentChatId+
+      "/"+currentUser.uid
+    )
+  );
+
+}
+
+
+/* =========================
+   UI helpers
+========================= */
+
+function setActiveItem(id){
+
+  document
+    .querySelectorAll(".chat-item")
+    .forEach(el=>{
+      el.classList.remove("active");
+    });
+
+  const el =
+    document.getElementById(id);
+
+  if(el) el.classList.add("active");
+
+}
+
+
+window.closeModals = function(){
+
+  document
+    .querySelectorAll(".modal")
+    .forEach(m=>{
+      m.classList.remove("show");
+    });
+
+};
+
+
+window.copyGeneratedCode = async function(){
+
+  const code =
+    document.getElementById("generatedCode")
+    .textContent;
+
+  await navigator.clipboard.writeText(code);
+
+  alert("채팅방 코드가 복사되었습니다.");
+
+};
+
+
+window.copyRoomCode = async function(){
+
+  if(!currentRoomCode){
+
+    alert("현재 채팅방에는 입장 코드가 없습니다.");
+    return;
+
+  }
+
+  await navigator.clipboard.writeText(
+    currentRoomCode
+  );
+
+  alert("코드가 복사되었습니다.");
+
+};
+
+
+window.clearLocalChat = function(){
+
+  if(currentChatType==="chatgpt"){
+
+    document.getElementById("messages").innerHTML="";
+
+    return;
+
+  }
+
+  alert(
+    "Firebase의 채팅 기록은 다른 사용자에게도 영향을 줄 수 있어\n현재 화면만 새로고침됩니다."
+  );
+
+};
+
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
