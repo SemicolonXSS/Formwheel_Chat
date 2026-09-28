@@ -20,7 +20,7 @@ body{
   overflow:hidden;
 }
 
-button,input{
+button,input,textarea{
   font:inherit;
 }
 
@@ -28,10 +28,14 @@ button{
   cursor:pointer;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 header{
   height:64px;
   background:white;
-  border-bottom:1px solid #e8eaf0;
+  border-bottom:1px solid #e7e8ed;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -41,10 +45,10 @@ header{
 }
 
 .logo{
+  color:#222;
+  text-decoration:none;
   font-size:21px;
   font-weight:800;
-  text-decoration:none;
-  color:#222;
   display:flex;
   align-items:center;
   gap:7px;
@@ -55,20 +59,19 @@ header{
   height:28px;
   border-radius:50%;
   border:6px dotted #5b5ff0;
-  display:inline-block;
 }
 
 .user-area{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:9px;
 }
 
 .status-dot{
   width:9px;
   height:9px;
-  border-radius:50%;
   background:#22c55e;
+  border-radius:50%;
 }
 
 .nickname{
@@ -76,13 +79,124 @@ header{
   font-weight:700;
 }
 
-.change-name{
+.header-btn{
   border:0;
-  background:#f1f2f7;
-  padding:7px 10px;
+  background:#f1f2f6;
   border-radius:9px;
+  padding:7px 10px;
   font-size:12px;
+  font-weight:700;
 }
+
+/* =========================
+   LOGIN SCREEN
+========================= */
+
+.login-screen{
+  position:fixed;
+  inset:64px 0 0;
+  background:#f7f8fc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  z-index:50;
+}
+
+.login-card{
+  width:min(420px,100%);
+  background:white;
+  border:1px solid #e5e6ec;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 18px 55px rgba(0,0,0,.08);
+}
+
+.login-logo{
+  text-align:center;
+  font-size:27px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.login-desc{
+  text-align:center;
+  color:#888b95;
+  font-size:13px;
+  margin-bottom:25px;
+}
+
+.login-tabs{
+  display:flex;
+  background:#f1f2f6;
+  border-radius:10px;
+  padding:4px;
+  margin-bottom:18px;
+}
+
+.login-tab{
+  flex:1;
+  border:0;
+  background:transparent;
+  padding:10px;
+  border-radius:8px;
+  font-weight:700;
+  color:#888;
+}
+
+.login-tab.active{
+  background:white;
+  color:#333;
+  box-shadow:0 2px 7px rgba(0,0,0,.06);
+}
+
+.login-input{
+  width:100%;
+  padding:13px;
+  border:1px solid #dddfe7;
+  border-radius:10px;
+  outline:none;
+  margin-bottom:10px;
+}
+
+.login-input:focus{
+  border-color:#5b5ff0;
+}
+
+.login-main-btn{
+  width:100%;
+  border:0;
+  background:#5b5ff0;
+  color:white;
+  padding:13px;
+  border-radius:10px;
+  font-weight:800;
+  margin-top:5px;
+}
+
+.login-main-btn:hover{
+  background:#4d51dc;
+}
+
+.login-message{
+  min-height:20px;
+  margin-top:12px;
+  text-align:center;
+  font-size:12px;
+  color:#e05252;
+}
+
+.login-nickname{
+  display:none;
+}
+
+.login-nickname.show{
+  display:block;
+}
+
+/* =========================
+   APP
+========================= */
 
 .app{
   height:calc(100vh - 64px);
@@ -90,8 +204,6 @@ header{
   max-width:1400px;
   margin:auto;
 }
-
-/* SIDEBAR */
 
 .sidebar{
   width:290px;
@@ -126,12 +238,10 @@ header{
   border-radius:11px;
   font-weight:700;
   font-size:13px;
-  transition:.15s;
 }
 
 .action-btn:hover{
-  background:#e6e7ef;
-  transform:translateY(-1px);
+  background:#e5e6ed;
 }
 
 .action-btn.primary{
@@ -157,7 +267,6 @@ header{
   align-items:center;
   gap:11px;
   cursor:pointer;
-  transition:.12s;
 }
 
 .chat-item:hover{
@@ -205,19 +314,17 @@ header{
   color:#8c8f99;
   font-size:12px;
   margin-top:4px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-/* MAIN CHAT */
+/* =========================
+   CHAT
+========================= */
 
 .chat{
   flex:1;
   min-width:0;
   display:flex;
   flex-direction:column;
-  background:#f7f8fc;
 }
 
 .chat-header{
@@ -252,13 +359,12 @@ header{
   border-radius:9px;
   padding:9px 11px;
   outline:none;
-  font-size:13px;
 }
 
 .messages{
   flex:1;
   overflow-y:auto;
-  padding:24px 24px 15px;
+  padding:24px;
 }
 
 .empty{
@@ -294,10 +400,6 @@ header{
   justify-content:flex-end;
 }
 
-.message-row.mine .message-avatar{
-  display:none;
-}
-
 .message-avatar{
   width:32px;
   height:32px;
@@ -309,7 +411,6 @@ header{
   align-items:center;
   font-size:13px;
   font-weight:800;
-  flex-shrink:0;
 }
 
 .message-content{
@@ -360,10 +461,6 @@ header{
   white-space:nowrap;
 }
 
-.mine .message-time{
-  color:#999ca6;
-}
-
 .message-actions{
   margin-top:4px;
   display:flex;
@@ -375,11 +472,6 @@ header{
   background:transparent;
   color:#999;
   font-size:10px;
-  padding:2px;
-}
-
-.message-actions button:hover{
-  color:#555;
 }
 
 .typing{
@@ -421,7 +513,6 @@ header{
   border-radius:12px;
   padding:11px 13px;
   outline:none;
-  font-size:14px;
 }
 
 .send-btn{
@@ -431,16 +522,16 @@ header{
   border-radius:11px;
   background:#5b5ff0;
   color:white;
-  font-size:17px;
   font-weight:800;
 }
 
 .send-btn:disabled{
   background:#c7c9d4;
-  cursor:not-allowed;
 }
 
-/* EMOJI */
+/* =========================
+   EMOJI
+========================= */
 
 .emoji-panel{
   position:absolute;
@@ -484,7 +575,9 @@ header{
   background:#f0f1f5;
 }
 
-/* MODAL */
+/* =========================
+   MODAL
+========================= */
 
 .modal-bg{
   position:fixed;
@@ -529,10 +622,6 @@ header{
   margin-bottom:10px;
 }
 
-.modal-input:focus{
-  border-color:#6c63ff;
-}
-
 .modal-buttons{
   display:flex;
   gap:8px;
@@ -556,27 +645,12 @@ header{
   color:white;
 }
 
-/* MOBILE */
-
-.mobile-menu{
-  display:none;
-}
-
-@media(max-width:750px){
-  .sidebar{
-    width:230px;
-  }
-
-  .search-box{
-    display:none;
-  }
-
-  .message-content{
-    max-width:82%;
-  }
-}
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:600px){
+
   .sidebar{
     width:70px;
   }
@@ -585,8 +659,8 @@ header{
   .action-btn span,
   .chat-info,
   .section-title,
-  .change-name,
-  .nickname{
+  .nickname,
+  .header-btn{
     display:none;
   }
 
@@ -603,7 +677,6 @@ header{
     height:45px;
     margin-bottom:6px;
     padding:0;
-    font-size:18px;
   }
 
   .chat-item{
@@ -611,29 +684,16 @@ header{
     padding:10px;
   }
 
-  .avatar{
-    width:43px;
-    height:43px;
-  }
-
-  .user-area{
-    gap:0;
-  }
-
-  header{
-    padding:0 12px;
-  }
-
   .messages{
-    padding:18px 12px 10px;
+    padding:18px 12px;
   }
 
-  .chat-header{
-    padding:0 12px;
+  .message-content{
+    max-width:82%;
   }
 
-  .composer{
-    padding:9px;
+  .search-box{
+    display:none;
   }
 }
 </style>
@@ -642,114 +702,285 @@ header{
 <body>
 
 <header>
+
   <a class="logo" href="https://semicolonxss.github.io/Formwheel/">
     <span>Form</span>
     <span class="logo-wheel"></span>
     <span>Wheel</span>
   </a>
 
-  <div class="user-area">
+  <div class="user-area" id="userArea" style="display:none;">
+
     <span class="status-dot"></span>
-    <span class="nickname" id="myNickname">접속 중...</span>
-    <button class="change-name" onclick="openNicknameModal()">닉네임 변경</button>
+
+    <span class="nickname" id="myNickname">
+      사용자
+    </span>
+
+    <button
+      class="header-btn"
+      onclick="openNicknameModal()">
+      닉네임
+    </button>
+
+    <button
+      class="header-btn"
+      onclick="logout()">
+      로그아웃
+    </button>
+
   </div>
+
 </header>
 
-<div class="app">
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<div class="login-screen" id="loginScreen">
+
+  <div class="login-card">
+
+    <div class="login-logo">
+      💬 FormWheel Chat
+    </div>
+
+    <div class="login-desc">
+      로그인하고 FormWheel에서 대화해보세요.
+    </div>
+
+    <div class="login-tabs">
+
+      <button
+        class="login-tab active"
+        id="loginTab"
+        onclick="setLoginMode('login')">
+        로그인
+      </button>
+
+      <button
+        class="login-tab"
+        id="signupTab"
+        onclick="setLoginMode('signup')">
+        회원가입
+      </button>
+
+    </div>
+
+    <div
+      class="login-nickname"
+      id="signupNicknameBox">
+
+      <input
+        class="login-input"
+        id="signupNickname"
+        maxlength="12"
+        placeholder="닉네임">
+
+    </div>
+
+    <input
+      class="login-input"
+      id="emailInput"
+      type="email"
+      placeholder="이메일">
+
+    <input
+      class="login-input"
+      id="passwordInput"
+      type="password"
+      placeholder="비밀번호">
+
+    <button
+      class="login-main-btn"
+      id="loginMainButton"
+      onclick="submitAuth()">
+      로그인
+    </button>
+
+    <div
+      class="login-message"
+      id="loginMessage">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     CHAT APP
+========================= -->
+
+<div class="app" id="app" style="display:none;">
 
   <aside class="sidebar">
 
     <div class="sidebar-top">
-      <div class="sidebar-title">💬 Chat</div>
+
+      <div class="sidebar-title">
+        💬 Chat
+      </div>
 
       <div class="action-grid">
-        <button class="action-btn primary" onclick="openRoomCreate()">
+
+        <button
+          class="action-btn primary"
+          onclick="openRoomCreate()">
           ➕ <span>방 만들기</span>
         </button>
 
-        <button class="action-btn" onclick="openRoomJoin()">
+        <button
+          class="action-btn"
+          onclick="openRoomJoin()">
           🔢 <span>방 입장</span>
         </button>
 
-        <button class="action-btn" onclick="openPrivateSearch()">
+        <button
+          class="action-btn"
+          onclick="openPrivateSearch()">
           👤 <span>개인톡</span>
         </button>
 
-        <button class="action-btn" onclick="openPublicChat()">
+        <button
+          class="action-btn"
+          onclick="openPublicChat()">
           🌐 <span>전체채팅</span>
         </button>
+
       </div>
+
     </div>
 
     <div class="chat-list">
 
-      <div class="section-title">채팅</div>
+      <div class="section-title">
+        채팅
+      </div>
 
-      <div class="chat-item active" id="publicChatItem" onclick="openPublicChat()">
-        <div class="avatar">🌐</div>
-        <div class="chat-info">
-          <div class="chat-name">전체 채팅</div>
-          <div class="chat-preview">FormWheel 전체 채팅방</div>
+      <div
+        class="chat-item active"
+        id="publicChatItem"
+        onclick="openPublicChat()">
+
+        <div class="avatar">
+          🌐
         </div>
+
+        <div class="chat-info">
+
+          <div class="chat-name">
+            전체 채팅
+          </div>
+
+          <div class="chat-preview">
+            FormWheel 전체 채팅방
+          </div>
+
+        </div>
+
       </div>
 
       <div id="roomList"></div>
 
-      <div class="section-title">온라인 사용자</div>
+      <div class="section-title">
+        온라인 사용자
+      </div>
+
       <div id="userList"></div>
 
     </div>
 
   </aside>
 
+
   <main class="chat">
 
     <div class="chat-header">
 
-      <div class="avatar small" id="chatAvatar">🌐</div>
+      <div
+        class="avatar small"
+        id="chatAvatar">
+        🌐
+      </div>
 
       <div class="chat-header-info">
-        <div class="chat-header-title" id="chatTitle">
+
+        <div
+          class="chat-header-title"
+          id="chatTitle">
           전체 채팅
         </div>
 
-        <div class="chat-header-sub" id="chatSub">
+        <div
+          class="chat-header-sub"
+          id="chatSub">
           FormWheel 사용자들과 대화하세요
         </div>
+
       </div>
 
       <input
         class="search-box"
         id="searchInput"
         placeholder="메시지 검색..."
-        oninput="filterMessages()"
-      >
+        oninput="filterMessages()">
 
     </div>
 
-    <div class="messages" id="messages">
+
+    <div
+      class="messages"
+      id="messages">
 
       <div class="empty">
-        <div class="empty-icon">💬</div>
-        <div class="empty-title">FormWheel Chat</div>
-        <div>메시지를 보내 대화를 시작해보세요!</div>
+
+        <div class="empty-icon">
+          💬
+        </div>
+
+        <div class="empty-title">
+          FormWheel Chat
+        </div>
+
+        <div>
+          메시지를 보내 대화를 시작해보세요!
+        </div>
+
       </div>
 
     </div>
 
-    <div class="typing" id="typingText"></div>
+
+    <div
+      class="typing"
+      id="typingText">
+    </div>
+
 
     <div class="composer">
 
-      <div class="emoji-panel" id="emojiPanel">
-        <div class="emoji-title">😀 이모티콘</div>
+      <div
+        class="emoji-panel"
+        id="emojiPanel">
 
-        <div class="emoji-grid" id="emojiGrid"></div>
+        <div class="emoji-title">
+          😀 이모티콘
+        </div>
+
+        <div
+          class="emoji-grid"
+          id="emojiGrid">
+        </div>
+
       </div>
 
       <div class="composer-row">
 
-        <button class="icon-btn" onclick="toggleEmoji()">
+        <button
+          class="icon-btn"
+          onclick="toggleEmoji()">
           😀
         </button>
 
@@ -759,15 +990,14 @@ header{
           placeholder="메시지를 입력하세요..."
           rows="1"
           oninput="handleTyping()"
-          onkeydown="handleInputKey(event)"
-        ></textarea>
+          onkeydown="handleInputKey(event)">
+        </textarea>
 
         <button
           class="send-btn"
           id="sendButton"
           onclick="sendMessage()"
-          disabled
-        >
+          disabled>
           ➤
         </button>
 
@@ -782,40 +1012,61 @@ header{
 
 <!-- ROOM CREATE -->
 
-<div class="modal-bg" id="roomCreateModal">
+<div
+  class="modal-bg"
+  id="roomCreateModal">
+
   <div class="modal">
 
-    <h2>➕ 채팅방 만들기</h2>
+    <h2>
+      ➕ 채팅방 만들기
+    </h2>
 
     <div class="modal-desc">
-      4자리 코드로 친구가 입장할 수 있는 방을 만듭니다.
+      4자리 코드로 친구가 입장할 수 있는 방입니다.
     </div>
 
     <input
       class="modal-input"
       id="roomNameInput"
       maxlength="30"
-      placeholder="채팅방 이름"
-    >
+      placeholder="채팅방 이름">
 
     <div class="modal-buttons">
-      <button class="cancel" onclick="closeModals()">취소</button>
-      <button class="confirm" onclick="createRoom()">방 만들기</button>
+
+      <button
+        class="cancel"
+        onclick="closeModals()">
+        취소
+      </button>
+
+      <button
+        class="confirm"
+        onclick="createRoom()">
+        방 만들기
+      </button>
+
     </div>
 
   </div>
+
 </div>
 
 
 <!-- ROOM JOIN -->
 
-<div class="modal-bg" id="roomJoinModal">
+<div
+  class="modal-bg"
+  id="roomJoinModal">
+
   <div class="modal">
 
-    <h2>🔢 채팅방 입장</h2>
+    <h2>
+      🔢 채팅방 입장
+    </h2>
 
     <div class="modal-desc">
-      친구에게 받은 4자리 코드를 입력하세요.
+      4자리 코드를 입력하세요.
     </div>
 
     <input
@@ -823,45 +1074,73 @@ header{
       id="roomCodeInput"
       maxlength="4"
       inputmode="numeric"
-      placeholder="예: 2387"
-    >
+      placeholder="예: 2387">
 
     <div class="modal-buttons">
-      <button class="cancel" onclick="closeModals()">취소</button>
-      <button class="confirm" onclick="joinRoom()">입장</button>
+
+      <button
+        class="cancel"
+        onclick="closeModals()">
+        취소
+      </button>
+
+      <button
+        class="confirm"
+        onclick="joinRoom()">
+        입장
+      </button>
+
     </div>
 
   </div>
+
 </div>
 
 
-<!-- PRIVATE SEARCH -->
+<!-- PRIVATE -->
 
-<div class="modal-bg" id="privateSearchModal">
+<div
+  class="modal-bg"
+  id="privateSearchModal">
+
   <div class="modal">
 
-    <h2>👤 개인톡</h2>
+    <h2>
+      👤 개인톡
+    </h2>
 
     <div class="modal-desc">
-      아래에서 사용자를 선택해 1:1 채팅을 시작하세요.
+      대화할 사용자를 선택하세요.
     </div>
 
     <div id="privateUserList"></div>
 
     <div class="modal-buttons">
-      <button class="cancel" onclick="closeModals()">닫기</button>
+
+      <button
+        class="cancel"
+        onclick="closeModals()">
+        닫기
+      </button>
+
     </div>
 
   </div>
+
 </div>
 
 
 <!-- NICKNAME -->
 
-<div class="modal-bg" id="nicknameModal">
+<div
+  class="modal-bg"
+  id="nicknameModal">
+
   <div class="modal">
 
-    <h2>✏️ 닉네임 변경</h2>
+    <h2>
+      ✏️ 닉네임 변경
+    </h2>
 
     <div class="modal-desc">
       최대 12자까지 사용할 수 있습니다.
@@ -871,27 +1150,42 @@ header{
       class="modal-input"
       id="nicknameInput"
       maxlength="12"
-      placeholder="새 닉네임"
-    >
+      placeholder="새 닉네임">
 
     <div class="modal-buttons">
-      <button class="cancel" onclick="closeModals()">취소</button>
-      <button class="confirm" onclick="changeNickname()">변경</button>
+
+      <button
+        class="cancel"
+        onclick="closeModals()">
+        취소
+      </button>
+
+      <button
+        class="confirm"
+        onclick="changeNickname()">
+        변경
+      </button>
+
     </div>
 
   </div>
+
 </div>
 
 
 <script type="module">
 
-import { initializeApp }
+import {
+  initializeApp
+}
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
   getAuth,
-  signInAnonymously,
-  onAuthStateChanged
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
@@ -904,8 +1198,6 @@ import {
   remove,
   get,
   onValue,
-  onChildAdded,
-  onChildRemoved,
   onDisconnect,
   serverTimestamp,
   query,
@@ -920,43 +1212,67 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 ========================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBreTSe1m0-xlbF4aupnU5isRZCihR25IE",
-  authDomain: "formwheel.firebaseapp.com",
-  databaseURL: "https://formwheel-default-rtdb.firebaseio.com",
-  projectId: "formwheel",
-  storageBucket: "formwheel.firebasestorage.app",
-  messagingSenderId: "431583088241",
-  appId: "1:431583088241:web:74e0e34ea1e3e1170c55d0",
-  measurementId: "G-T372YXDF8D8"
+
+  apiKey:
+    "AIzaSyBreTSe1m0-xlbF4aupnU5isRZCihR25IE",
+
+  authDomain:
+    "formwheel.firebaseapp.com",
+
+  databaseURL:
+    "https://formwheel-default-rtdb.firebaseio.com",
+
+  projectId:
+    "formwheel",
+
+  storageBucket:
+    "formwheel.firebasestorage.app",
+
+  messagingSenderId:
+    "431583088241",
+
+  appId:
+    "1:431583088241:web:74e0e34ea1e3e1170c55d0",
+
+  measurementId:
+    "G-T372YXDF8D8"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getDatabase(app);
 
 
 /* =========================
-   GLOBAL STATE
+   STATE
 ========================= */
 
 let currentUser = null;
 
 let nickname =
-  localStorage.getItem("formwheel_chat_nickname") ||
-  "사용자";
+  localStorage.getItem(
+    "formwheel_chat_nickname"
+  ) || "사용자";
+
+let authMode = "login";
 
 let currentChatType = "public";
 
 let currentRoomId = null;
+
 let currentPrivateId = null;
 
 let messagesCache = [];
 
-let unsubscribeMessages = null;
+let allUsers = {};
 
 let typingTimer = null;
-
-let allUsers = {};
 
 
 /* =========================
@@ -964,6 +1280,7 @@ let allUsers = {};
 ========================= */
 
 const emojis = [
+
   "😀","😃","😄","😁","😆","😅","😂","🤣",
   "😊","😇","🙂","🙃","😉","😌","😍","🥰",
   "😘","😎","🤩","🥳","🤔","🧐","🤨","😐",
@@ -975,19 +1292,25 @@ const emojis = [
   "🎉","🎊","💯","⭐","🌟","💥","💫","🎮",
   "🎲","🎵","🎶","🍀","🍕","🍔","🍟","🐶",
   "🐱","🦊","🐻","🐼","🐸","🐵","🙈","👀"
+
 ];
 
-const emojiGrid = document.getElementById("emojiGrid");
+const emojiGrid =
+  document.getElementById("emojiGrid");
 
 emojis.forEach(emoji => {
 
-  const button = document.createElement("button");
+  const button =
+    document.createElement("button");
 
   button.textContent = emoji;
 
   button.onclick = () => {
 
-    const input = document.getElementById("messageInput");
+    const input =
+      document.getElementById(
+        "messageInput"
+      );
 
     input.value += emoji;
 
@@ -1003,78 +1326,275 @@ emojis.forEach(emoji => {
 
 
 /* =========================
-   AUTH
+   AUTH STATE
 ========================= */
 
-signInAnonymously(auth)
-  .catch(error => {
-    console.error(error);
+onAuthStateChanged(
+  auth,
+  async user => {
 
-    alert(
-      "Firebase 익명 로그인이 활성화되어 있지 않습니다.\n\n" +
-      "Firebase Console → Authentication → Sign-in method → 익명(Anonymous)을 활성화해주세요."
-    );
-  });
+    if (user){
 
+      currentUser = user;
 
-onAuthStateChanged(auth, async user => {
+      document.getElementById(
+        "loginScreen"
+      ).style.display = "none";
 
-  if (!user) return;
+      document.getElementById(
+        "app"
+      ).style.display = "flex";
 
-  currentUser = user;
+      document.getElementById(
+        "userArea"
+      ).style.display = "flex";
 
-  document.getElementById("myNickname").textContent = nickname;
+      await setupUser();
 
-  await setupUser();
+      setupOnlineStatus();
 
-  setupOnlineStatus();
+      loadUsers();
 
-  loadUsers();
+      loadRooms();
 
-  loadRooms();
+      openPublicChat();
 
-  openPublicChat();
+    }else{
 
-});
+      currentUser = null;
+
+      document.getElementById(
+        "loginScreen"
+      ).style.display = "flex";
+
+      document.getElementById(
+        "app"
+      ).style.display = "none";
+
+      document.getElementById(
+        "userArea"
+      ).style.display = "none";
+
+    }
+
+  }
+);
 
 
 /* =========================
-   USER SETUP
+   LOGIN / SIGNUP MODE
 ========================= */
 
-async function setupUser(){
+window.setLoginMode =
+function(mode){
 
-  const userRef = ref(db, `chatUsers/${currentUser.uid}`);
+  authMode = mode;
 
-  const snapshot = await get(userRef);
+  const loginTab =
+    document.getElementById("loginTab");
 
-  if (!snapshot.exists()) {
+  const signupTab =
+    document.getElementById("signupTab");
 
-    await set(userRef, {
+  const nicknameBox =
+    document.getElementById(
+      "signupNicknameBox"
+    );
 
-      uid: currentUser.uid,
+  const button =
+    document.getElementById(
+      "loginMainButton"
+    );
 
-      nickname: nickname,
+  const message =
+    document.getElementById(
+      "loginMessage"
+    );
 
-      online: true,
+  message.textContent = "";
 
-      createdAt: serverTimestamp(),
+  if (mode === "login"){
 
-      lastSeen: serverTimestamp()
+    loginTab.classList.add("active");
 
-    });
+    signupTab.classList.remove("active");
 
-  } else {
+    nicknameBox.classList.remove("show");
 
-    await update(userRef, {
+    button.textContent = "로그인";
 
-      nickname: nickname,
+  }else{
 
-      online: true,
+    signupTab.classList.add("active");
 
-      lastSeen: serverTimestamp()
+    loginTab.classList.remove("active");
 
-    });
+    nicknameBox.classList.add("show");
+
+    button.textContent = "회원가입";
+
+  }
+
+};
+
+
+/* =========================
+   AUTH SUBMIT
+========================= */
+
+window.submitAuth =
+async function(){
+
+  const email =
+    document
+      .getElementById("emailInput")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("passwordInput")
+      .value;
+
+  const message =
+    document
+      .getElementById("loginMessage");
+
+  message.style.color = "#e05252";
+
+  if (!email){
+
+    message.textContent =
+      "이메일을 입력해주세요.";
+
+    return;
+
+  }
+
+  if (password.length < 6){
+
+    message.textContent =
+      "비밀번호는 6자 이상이어야 합니다.";
+
+    return;
+
+  }
+
+  try{
+
+    if (authMode === "login"){
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    }else{
+
+      const newNickname =
+        document
+          .getElementById("signupNickname")
+          .value
+          .trim();
+
+      if (!newNickname){
+
+        message.textContent =
+          "닉네임을 입력해주세요.";
+
+        return;
+
+      }
+
+      if (newNickname.length > 12){
+
+        message.textContent =
+          "닉네임은 12자 이하로 해주세요.";
+
+        return;
+
+      }
+
+      const credential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      nickname =
+        newNickname;
+
+      localStorage.setItem(
+        "formwheel_chat_nickname",
+        nickname
+      );
+
+      await set(
+        ref(
+          db,
+          `chatUsers/${credential.user.uid}`
+        ),
+        {
+
+          uid:credential.user.uid,
+
+          nickname:nickname,
+
+          email:email,
+
+          online:true,
+
+          createdAt:serverTimestamp(),
+
+          lastSeen:serverTimestamp()
+
+        }
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    message.textContent =
+      firebaseErrorMessage(error.code);
+
+  }
+
+};
+
+
+/* =========================
+   FIREBASE ERROR
+========================= */
+
+function firebaseErrorMessage(code){
+
+  switch(code){
+
+    case "auth/invalid-email":
+      return "이메일 형식이 올바르지 않습니다.";
+
+    case "auth/user-not-found":
+      return "존재하지 않는 계정입니다.";
+
+    case "auth/wrong-password":
+      return "비밀번호가 올바르지 않습니다.";
+
+    case "auth/invalid-credential":
+      return "이메일 또는 비밀번호가 올바르지 않습니다.";
+
+    case "auth/email-already-in-use":
+      return "이미 사용 중인 이메일입니다.";
+
+    case "auth/weak-password":
+      return "비밀번호가 너무 약합니다.";
+
+    default:
+      return "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.";
 
   }
 
@@ -1082,13 +1602,106 @@ async function setupUser(){
 
 
 /* =========================
-   ONLINE STATUS
+   LOGOUT
 ========================= */
+
+window.logout =
+async function(){
+
+  if (currentUser){
+
+    await update(
+      ref(
+        db,
+        `chatUsers/${currentUser.uid}`
+      ),
+      {
+        online:false,
+        lastSeen:serverTimestamp()
+      }
+    );
+
+  }
+
+  await signOut(auth);
+
+};
+
+
+/* =========================
+   USER
+========================= */
+
+async function setupUser(){
+
+  const userRef =
+    ref(
+      db,
+      `chatUsers/${currentUser.uid}`
+    );
+
+  const snapshot =
+    await get(userRef);
+
+  if (!snapshot.exists()){
+
+    await set(
+      userRef,
+      {
+
+        uid:currentUser.uid,
+
+        nickname:nickname,
+
+        email:currentUser.email || "",
+
+        online:true,
+
+        createdAt:serverTimestamp(),
+
+        lastSeen:serverTimestamp()
+
+      }
+    );
+
+  }else{
+
+    const data =
+      snapshot.val();
+
+    nickname =
+      data.nickname ||
+      nickname;
+
+    localStorage.setItem(
+      "formwheel_chat_nickname",
+      nickname
+    );
+
+    await update(
+      userRef,
+      {
+        online:true,
+        lastSeen:serverTimestamp()
+      }
+    );
+
+  }
+
+  document.getElementById(
+    "myNickname"
+  ).textContent = nickname;
+
+}
+
 
 function setupOnlineStatus(){
 
   const userRef =
-    ref(db, `chatUsers/${currentUser.uid}`);
+    ref(
+      db,
+      `chatUsers/${currentUser.uid}`
+    );
 
   onDisconnect(userRef).update({
 
@@ -1098,65 +1711,79 @@ function setupOnlineStatus(){
 
   });
 
-  update(userRef, {
-
-    online:true,
-
-    lastSeen:serverTimestamp()
-
-  });
+  update(
+    userRef,
+    {
+      online:true,
+      lastSeen:serverTimestamp()
+    }
+  );
 
 }
 
 
 /* =========================
-   LOAD USERS
+   USERS
 ========================= */
 
 function loadUsers(){
 
-  const usersRef = ref(db, "chatUsers");
+  onValue(
+    ref(db,"chatUsers"),
+    snapshot => {
 
-  onValue(usersRef, snapshot => {
+      allUsers =
+        snapshot.val() || {};
 
-    allUsers = snapshot.val() || {};
+      renderUsers();
 
-    renderUsers();
-
-  });
+    }
+  );
 
 }
 
 
 function renderUsers(){
 
-  const userList =
-    document.getElementById("userList");
+  const list =
+    document.getElementById(
+      "userList"
+    );
 
-  userList.innerHTML = "";
+  list.innerHTML = "";
 
   Object.values(allUsers)
-    .filter(user => user.uid !== currentUser?.uid)
-    .sort((a,b) => Number(b.online) - Number(a.online))
+    .filter(
+      user =>
+        user.uid !== currentUser?.uid
+    )
+    .sort(
+      (a,b) =>
+        Number(b.online) -
+        Number(a.online)
+    )
     .forEach(user => {
 
       const item =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
-      item.className = "chat-item";
+      item.className =
+        "chat-item";
 
-      item.onclick = () => {
-
-        openPrivateChat(user.uid);
-
-      };
+      item.onclick = () =>
+        openPrivateChat(
+          user.uid
+        );
 
       item.innerHTML = `
 
         <div class="avatar">
 
           ${escapeHtml(
-            (user.nickname || "?").charAt(0)
+            (user.nickname || "?")
+              .charAt(0)
           )}
 
         </div>
@@ -1166,7 +1793,8 @@ function renderUsers(){
           <div class="chat-name">
 
             ${escapeHtml(
-              user.nickname || "사용자"
+              user.nickname ||
+              "사용자"
             )}
 
             ${user.online ? " 🟢" : ""}
@@ -1175,7 +1803,11 @@ function renderUsers(){
 
           <div class="chat-preview">
 
-            ${user.online ? "온라인" : "오프라인"}
+            ${
+              user.online
+              ? "온라인"
+              : "오프라인"
+            }
 
           </div>
 
@@ -1183,7 +1815,7 @@ function renderUsers(){
 
       `;
 
-      userList.appendChild(item);
+      list.appendChild(item);
 
     });
 
@@ -1194,7 +1826,16 @@ function renderUsers(){
    PUBLIC CHAT
 ========================= */
 
-function openPublicChat(){
+window.openPublicChat =
+function(){
+
+  if (!currentUser){
+
+    alert("로그인 후 이용할 수 있습니다.");
+
+    return;
+
+  }
 
   currentChatType = "public";
 
@@ -1202,56 +1843,56 @@ function openPublicChat(){
 
   currentPrivateId = null;
 
-  document.getElementById("chatTitle").textContent =
-    "전체 채팅";
+  document.getElementById(
+    "chatTitle"
+  ).textContent = "전체 채팅";
 
-  document.getElementById("chatSub").textContent =
+  document.getElementById(
+    "chatSub"
+  ).textContent =
     "FormWheel 사용자들과 대화하세요";
 
-  document.getElementById("chatAvatar").textContent =
-    "🌐";
-
-  document
-    .getElementById("publicChatItem")
-    .classList.add("active");
+  document.getElementById(
+    "chatAvatar"
+  ).textContent = "🌐";
 
   clearActiveItems();
 
-  document
-    .getElementById("publicChatItem")
-    .classList.add("active");
+  document.getElementById(
+    "publicChatItem"
+  ).classList.add("active");
 
   listenMessages(
     "chat/public/messages"
   );
 
-}
+};
 
 
 /* =========================
-   ROOM CREATE
+   ROOM
 ========================= */
 
-window.openRoomCreate = function(){
+window.openRoomCreate =
+function(){
 
   closeModals();
 
-  document
-    .getElementById("roomCreateModal")
-    .classList.add("show");
-
-  document
-    .getElementById("roomNameInput")
-    .focus();
+  document.getElementById(
+    "roomCreateModal"
+  ).classList.add("show");
 
 };
 
 
-window.createRoom = async function(){
+window.createRoom =
+async function(){
 
   const name =
     document
-      .getElementById("roomNameInput")
+      .getElementById(
+        "roomNameInput"
+      )
       .value
       .trim();
 
@@ -1263,58 +1904,67 @@ window.createRoom = async function(){
 
   }
 
-  if (!currentUser) return;
+  let code;
 
-  let code = "";
-
-  let exists = true;
-
-  while(exists){
+  while(true){
 
     code =
       String(
         Math.floor(
-          1000 + Math.random() * 9000
+          1000 +
+          Math.random() *
+          9000
         )
       );
 
     const check =
       await get(
-        ref(db, `roomCodes/${code}`)
+        ref(
+          db,
+          `roomCodes/${code}`
+        )
       );
 
-    exists = check.exists();
+    if (!check.exists())
+      break;
 
   }
 
   const roomRef =
-    push(ref(db, "chatRooms"));
+    push(
+      ref(db,"chatRooms")
+    );
 
   const roomId =
     roomRef.key;
 
-  await set(roomRef, {
-
-    roomId:roomId,
-
-    name:name,
-
-    code:code,
-
-    owner:currentUser.uid,
-
-    createdAt:serverTimestamp()
-
-  });
-
   await set(
-    ref(db, `roomCodes/${code}`),
-    roomId
+    roomRef,
+    {
+
+      roomId:roomId,
+
+      name:name,
+
+      code:code,
+
+      owner:currentUser.uid,
+
+      createdAt:serverTimestamp(),
+
+      members:{
+        [currentUser.uid]:true
+      }
+
+    }
   );
 
   await set(
-    ref(db, `chatRooms/${roomId}/members/${currentUser.uid}`),
-    true
+    ref(
+      db,
+      `roomCodes/${code}`
+    ),
+    roomId
   );
 
   closeModals();
@@ -1328,30 +1978,26 @@ window.createRoom = async function(){
 };
 
 
-/* =========================
-   ROOM JOIN
-========================= */
-
-window.openRoomJoin = function(){
+window.openRoomJoin =
+function(){
 
   closeModals();
 
-  document
-    .getElementById("roomJoinModal")
-    .classList.add("show");
-
-  document
-    .getElementById("roomCodeInput")
-    .focus();
+  document.getElementById(
+    "roomJoinModal"
+  ).classList.add("show");
 
 };
 
 
-window.joinRoom = async function(){
+window.joinRoom =
+async function(){
 
   const code =
     document
-      .getElementById("roomCodeInput")
+      .getElementById(
+        "roomCodeInput"
+      )
       .value
       .trim();
 
@@ -1365,7 +2011,10 @@ window.joinRoom = async function(){
 
   const codeSnap =
     await get(
-      ref(db, `roomCodes/${code}`)
+      ref(
+        db,
+        `roomCodes/${code}`
+      )
     );
 
   if (!codeSnap.exists()){
@@ -1376,20 +2025,8 @@ window.joinRoom = async function(){
 
   }
 
-  const roomId = codeSnap.val();
-
-  const roomSnap =
-    await get(
-      ref(db, `chatRooms/${roomId}`)
-    );
-
-  if (!roomSnap.exists()){
-
-    alert("채팅방 정보를 찾을 수 없습니다.");
-
-    return;
-
-  }
+  const roomId =
+    codeSnap.val();
 
   await set(
     ref(
@@ -1406,88 +2043,92 @@ window.joinRoom = async function(){
 };
 
 
-/* =========================
-   LOAD ROOMS
-========================= */
-
 function loadRooms(){
 
-  const roomsRef =
-    ref(db, "chatRooms");
+  onValue(
+    ref(db,"chatRooms"),
+    snapshot => {
 
-  onValue(roomsRef, snapshot => {
+      const rooms =
+        snapshot.val() || {};
 
-    const rooms =
-      snapshot.val() || {};
+      const list =
+        document.getElementById(
+          "roomList"
+        );
 
-    const roomList =
-      document.getElementById("roomList");
+      list.innerHTML = "";
 
-    roomList.innerHTML = "";
+      Object.values(rooms)
+        .forEach(room => {
 
-    Object.values(rooms).forEach(room => {
+          if (
+            !room.members ||
+            !room.members[currentUser.uid]
+          ){
 
-      if (
-        !room.members ||
-        !room.members[currentUser.uid]
-      ){
+            return;
 
-        return;
+          }
 
-      }
+          const item =
+            document.createElement(
+              "div"
+            );
 
-      const item =
-        document.createElement("div");
+          item.className =
+            "chat-item";
 
-      item.className = "chat-item";
+          item.onclick = () =>
+            openRoom(
+              room.roomId
+            );
 
-      item.onclick = () =>
-        openRoom(room.roomId);
+          item.innerHTML = `
 
-      item.innerHTML = `
+            <div class="avatar">
+              🔒
+            </div>
 
-        <div class="avatar">
-          🔒
-        </div>
+            <div class="chat-info">
 
-        <div class="chat-info">
+              <div class="chat-name">
+                ${escapeHtml(room.name)}
+              </div>
 
-          <div class="chat-name">
-            ${escapeHtml(room.name)}
-          </div>
+              <div class="chat-preview">
+                코드 ${room.code}
+              </div>
 
-          <div class="chat-preview">
-            코드 ${room.code}
-          </div>
+            </div>
 
-        </div>
+          `;
 
-      `;
+          list.appendChild(item);
 
-      roomList.appendChild(item);
+        });
 
-    });
-
-  });
+    }
+  );
 
 }
 
 
-/* =========================
-   OPEN ROOM
-========================= */
-
 async function openRoom(roomId){
 
-  const roomSnap =
+  const snapshot =
     await get(
-      ref(db, `chatRooms/${roomId}`)
+      ref(
+        db,
+        `chatRooms/${roomId}`
+      )
     );
 
-  if (!roomSnap.exists()) return;
+  if (!snapshot.exists())
+    return;
 
   const room =
-    roomSnap.val();
+    snapshot.val();
 
   if (
     !room.members ||
@@ -1510,13 +2151,19 @@ async function openRoom(roomId){
 
   currentPrivateId = null;
 
-  document.getElementById("chatTitle").textContent =
+  document.getElementById(
+    "chatTitle"
+  ).textContent =
     room.name;
 
-  document.getElementById("chatSub").textContent =
+  document.getElementById(
+    "chatSub"
+  ).textContent =
     `입장 코드 ${room.code}`;
 
-  document.getElementById("chatAvatar").textContent =
+  document.getElementById(
+    "chatAvatar"
+  ).textContent =
     "🔒";
 
   clearActiveItems();
@@ -1534,16 +2181,23 @@ async function openRoom(roomId){
 
 function makePrivateId(a,b){
 
-  return [a,b].sort().join("_");
+  return [a,b]
+    .sort()
+    .join("_");
 
 }
 
 
 async function openPrivateChat(uid){
 
-  const user = allUsers[uid];
+  if (!currentUser)
+    return;
 
-  if (!user) return;
+  const user =
+    allUsers[uid];
+
+  if (!user)
+    return;
 
   const privateId =
     makePrivateId(
@@ -1553,26 +2207,42 @@ async function openPrivateChat(uid){
 
   currentChatType = "private";
 
-  currentPrivateId = privateId;
+  currentPrivateId =
+    privateId;
 
   currentRoomId = null;
 
   await update(
-    ref(db, `privateChats/${privateId}/members`),
+    ref(
+      db,
+      `privateChats/${privateId}/members`
+    ),
     {
+
       [currentUser.uid]:true,
+
       [uid]:true
+
     }
   );
 
-  document.getElementById("chatTitle").textContent =
+  document.getElementById(
+    "chatTitle"
+  ).textContent =
     user.nickname || "사용자";
 
-  document.getElementById("chatSub").textContent =
-    user.online ? "🟢 온라인" : "오프라인";
+  document.getElementById(
+    "chatSub"
+  ).textContent =
+    user.online
+    ? "🟢 온라인"
+    : "⚪ 오프라인";
 
-  document.getElementById("chatAvatar").textContent =
-    (user.nickname || "?").charAt(0);
+  document.getElementById(
+    "chatAvatar"
+  ).textContent =
+    (user.nickname || "?")
+      .charAt(0);
 
   closeModals();
 
@@ -1585,95 +2255,101 @@ async function openPrivateChat(uid){
 }
 
 
-window.openPrivateSearch = function(){
-
-  closeModals();
+window.openPrivateSearch =
+function(){
 
   const list =
-    document.getElementById("privateUserList");
+    document.getElementById(
+      "privateUserList"
+    );
 
   list.innerHTML = "";
 
-  const users =
-    Object.values(allUsers)
-      .filter(
-        user =>
-          user.uid !== currentUser.uid
+  Object.values(allUsers)
+    .filter(
+      user =>
+        user.uid !== currentUser.uid
+    )
+    .forEach(user => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.style.width =
+        "100%";
+
+      button.style.border =
+        "0";
+
+      button.style.background =
+        "#f4f5f8";
+
+      button.style.padding =
+        "12px";
+
+      button.style.marginBottom =
+        "7px";
+
+      button.style.borderRadius =
+        "10px";
+
+      button.style.textAlign =
+        "left";
+
+      button.innerHTML = `
+
+        <b>
+          ${escapeHtml(
+            user.nickname || "사용자"
+          )}
+        </b>
+
+        <span
+          style="color:#888;font-size:12px;">
+          ${
+            user.online
+            ? " 🟢 온라인"
+            : " ⚪ 오프라인"
+          }
+        </span>
+
+      `;
+
+      button.onclick = () =>
+        openPrivateChat(
+          user.uid
+        );
+
+      list.appendChild(
+        button
       );
 
-  if (!users.length){
+    });
 
-    list.innerHTML =
-      `<div style="color:#888;padding:15px 0;">
-        현재 다른 사용자가 없습니다.
-      </div>`;
-
-  }
-
-  users.forEach(user => {
-
-    const button =
-      document.createElement("button");
-
-    button.style.width = "100%";
-    button.style.border = "0";
-    button.style.background = "#f4f5f8";
-    button.style.padding = "12px";
-    button.style.marginBottom = "7px";
-    button.style.borderRadius = "10px";
-    button.style.textAlign = "left";
-    button.style.cursor = "pointer";
-
-    button.innerHTML = `
-
-      <b>
-        ${escapeHtml(user.nickname || "사용자")}
-      </b>
-
-      <span style="color:#888;font-size:12px;">
-        ${user.online ? " 🟢 온라인" : " ⚪ 오프라인"}
-      </span>
-
-    `;
-
-    button.onclick = () =>
-      openPrivateChat(user.uid);
-
-    list.appendChild(button);
-
-  });
-
-  document
-    .getElementById("privateSearchModal")
-    .classList.add("show");
+  document.getElementById(
+    "privateSearchModal"
+  ).classList.add("show");
 
 };
 
 
 /* =========================
-   MESSAGE LISTENER
+   MESSAGES
 ========================= */
 
 function listenMessages(path){
 
-  if (unsubscribeMessages){
-
-    unsubscribeMessages();
-
-    unsubscribeMessages = null;
-
-  }
-
   const messagesRef =
     query(
-      ref(db, path),
+      ref(db,path),
       orderByChild("createdAt"),
       limitToLast(100)
     );
 
-  messagesCache = [];
-
-  const callback =
+  onValue(
+    messagesRef,
     snapshot => {
 
       const data =
@@ -1681,10 +2357,13 @@ function listenMessages(path){
 
       messagesCache =
         Object.entries(data)
-          .map(([id,message]) => ({
-            id,
-            ...message
-          }))
+          .map(
+            ([id,message]) =>
+              ({
+                id,
+                ...message
+              })
+          )
           .sort(
             (a,b) =>
               (a.createdAt || 0) -
@@ -1693,28 +2372,23 @@ function listenMessages(path){
 
       renderMessages();
 
-    };
-
-  onValue(messagesRef, callback);
-
-  unsubscribeMessages = () => {};
+    }
+  );
 
 }
 
 
-/* =========================
-   RENDER MESSAGES
-========================= */
-
 function renderMessages(){
 
   const container =
-    document.getElementById("messages");
+    document.getElementById(
+      "messages"
+    );
 
   const search =
-    document
-      .getElementById("searchInput")
-      .value
+    document.getElementById(
+      "searchInput"
+    ).value
       .trim()
       .toLowerCase();
 
@@ -1724,8 +2398,11 @@ function renderMessages(){
   if (search){
 
     messages =
-      messages.filter(message =>
-        String(message.text || "")
+      messages.filter(
+        message =>
+          String(
+            message.text || ""
+          )
           .toLowerCase()
           .includes(search)
       );
@@ -1738,7 +2415,9 @@ function renderMessages(){
 
       <div class="empty">
 
-        <div class="empty-icon">💬</div>
+        <div class="empty-icon">
+          💬
+        </div>
 
         <div class="empty-title">
           아직 메시지가 없습니다.
@@ -1761,17 +2440,21 @@ function renderMessages(){
   messages.forEach(message => {
 
     const mine =
-      message.uid === currentUser?.uid;
+      message.uid ===
+      currentUser?.uid;
 
     const row =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     row.className =
       "message-row" +
-      (mine ? " mine" : "");
-
-    const time =
-      formatTime(message.createdAt);
+      (
+        mine
+        ? " mine"
+        : ""
+      );
 
     row.innerHTML = `
 
@@ -1781,7 +2464,8 @@ function renderMessages(){
         : `
           <div class="message-avatar">
             ${escapeHtml(
-              (message.nickname || "?").charAt(0)
+              (message.nickname || "?")
+                .charAt(0)
             )}
           </div>
         `
@@ -1795,7 +2479,8 @@ function renderMessages(){
           : `
             <div class="message-name">
               ${escapeHtml(
-                message.nickname || "사용자"
+                message.nickname ||
+                "사용자"
               )}
             </div>
           `
@@ -1804,11 +2489,15 @@ function renderMessages(){
         <div class="bubble-line">
 
           <div class="bubble">
-            ${escapeHtml(message.text || "")}
+            ${escapeHtml(
+              message.text || ""
+            )}
           </div>
 
           <div class="message-time">
-            ${time}
+            ${formatTime(
+              message.createdAt
+            )}
           </div>
 
         </div>
@@ -1848,39 +2537,52 @@ function renderMessages(){
 
 
 /* =========================
-   SEND MESSAGE
+   SEND
 ========================= */
 
-window.sendMessage = async function(){
+window.sendMessage =
+async function(){
+
+  if (!currentUser){
+
+    alert("로그인 후 이용할 수 있습니다.");
+
+    return;
+
+  }
 
   const input =
-    document.getElementById("messageInput");
+    document.getElementById(
+      "messageInput"
+    );
 
   const text =
     input.value.trim();
 
-  if (!text || !currentUser) return;
+  if (!text)
+    return;
 
-  let path = "";
+  let path;
 
-  if (currentChatType === "public"){
+  if (
+    currentChatType === "public"
+  ){
 
-    path = "chat/public/messages";
+    path =
+      "chat/public/messages";
 
   }
 
-  else if (currentChatType === "room"){
-
-    if (!currentRoomId) return;
+  else if (
+    currentChatType === "room"
+  ){
 
     path =
       `chatRooms/${currentRoomId}/messages`;
 
   }
 
-  else if (currentChatType === "private"){
-
-    if (!currentPrivateId) return;
+  else{
 
     path =
       `privateChats/${currentPrivateId}/messages`;
@@ -1890,17 +2592,20 @@ window.sendMessage = async function(){
   const messageRef =
     push(ref(db,path));
 
-  await set(messageRef, {
+  await set(
+    messageRef,
+    {
 
-    uid:currentUser.uid,
+      uid:currentUser.uid,
 
-    nickname:nickname,
+      nickname:nickname,
 
-    text:text,
+      text:text,
 
-    createdAt:serverTimestamp()
+      createdAt:serverTimestamp()
 
-  });
+    }
+  );
 
   input.value = "";
 
@@ -1908,56 +2613,66 @@ window.sendMessage = async function(){
 
   clearTyping();
 
-  input.focus();
+  document
+    .getElementById(
+      "emojiPanel"
+    )
+    .classList.remove("show");
 
 };
 
 
 /* =========================
-   MESSAGE DELETE
+   DELETE
 ========================= */
 
-window.deleteMessage = async function(messageId){
+window.deleteMessage =
+async function(id){
 
   const message =
     messagesCache.find(
-      m => m.id === messageId
+      m => m.id === id
     );
 
-  if (!message) return;
-
-  if (
-    message.uid !== currentUser.uid
-  ){
-
+  if (!message)
     return;
 
-  }
+  if (
+    message.uid !==
+    currentUser.uid
+  )
+    return;
 
-  let path = "";
+  let path;
 
-  if (currentChatType === "public"){
-
-    path =
-      `chat/public/messages/${messageId}`;
-
-  }
-
-  else if (currentChatType === "room"){
-
-    path =
-      `chatRooms/${currentRoomId}/messages/${messageId}`;
-
-  }
-
-  else if (currentChatType === "private"){
+  if (
+    currentChatType === "public"
+  ){
 
     path =
-      `privateChats/${currentPrivateId}/messages/${messageId}`;
+      `chat/public/messages/${id}`;
 
   }
 
-  await remove(ref(db,path));
+  else if (
+    currentChatType === "room"
+  ){
+
+    path =
+      `chatRooms/${currentRoomId}/messages/${id}`;
+
+  }
+
+  else{
+
+    path =
+      `privateChats/${currentPrivateId}/messages/${id}`;
+
+  }
+
+  await remove(
+    ref(db,path)
+  );
 
 };
 
@@ -1966,28 +2681,24 @@ window.deleteMessage = async function(messageId){
    COPY
 ========================= */
 
-window.copyMessage = async function(messageId){
+window.copyMessage =
+async function(id){
 
   const message =
     messagesCache.find(
-      m => m.id === messageId
+      m => m.id === id
     );
 
-  if (!message) return;
+  if (!message)
+    return;
 
-  try{
+  await navigator.clipboard.writeText(
+    message.text
+  );
 
-    await navigator.clipboard.writeText(
-      message.text
-    );
-
-    alert("메시지를 복사했습니다.");
-
-  }catch{
-
-    alert("복사에 실패했습니다.");
-
-  }
+  alert(
+    "메시지를 복사했습니다."
+  );
 
 };
 
@@ -2000,41 +2711,29 @@ function typingPath(){
 
   if (
     currentChatType === "public"
-  ){
-
+  )
     return "typing/public";
-
-  }
 
   if (
     currentChatType === "room"
-  ){
-
+  )
     return `typing/room_${currentRoomId}`;
 
-  }
-
-  if (
-    currentChatType === "private"
-  ){
-
-    return `typing/private_${currentPrivateId}`;
-
-  }
-
-  return null;
+  return `typing/private_${currentPrivateId}`;
 
 }
 
 
-function handleTyping(){
+window.handleTyping =
+function(){
 
   updateSendButton();
 
+  if (!currentUser)
+    return;
+
   const path =
     typingPath();
-
-  if (!path || !currentUser) return;
 
   const typingRef =
     ref(
@@ -2042,15 +2741,17 @@ function handleTyping(){
       `${path}/${currentUser.uid}`
     );
 
-  set(typingRef, {
+  set(
+    typingRef,
+    {
+      nickname:nickname,
+      at:serverTimestamp()
+    }
+  );
 
-    nickname:nickname,
-
-    at:serverTimestamp()
-
-  });
-
-  clearTimeout(typingTimer);
+  clearTimeout(
+    typingTimer
+  );
 
   typingTimer =
     setTimeout(
@@ -2058,17 +2759,16 @@ function handleTyping(){
       1500
     );
 
-}
+};
 
 
 function clearTyping(){
 
-  clearTimeout(typingTimer);
+  if (!currentUser)
+    return;
 
   const path =
     typingPath();
-
-  if (!path || !currentUser) return;
 
   remove(
     ref(
@@ -2081,81 +2781,27 @@ function clearTyping(){
 
 
 /* =========================
-   TYPING LISTENER
-========================= */
-
-onAuthStateChanged(auth,user => {
-
-  if (!user) return;
-
-  setInterval(async () => {
-
-    const path =
-      typingPath();
-
-    if (!path) return;
-
-    const snapshot =
-      await get(
-        ref(db,path)
-      );
-
-    const data =
-      snapshot.val() || {};
-
-    const others =
-      Object.values(data)
-        .filter(
-          item =>
-            item.nickname &&
-            item.nickname !== nickname
-        );
-
-    const typing =
-      document.getElementById("typingText");
-
-    if (others.length){
-
-      if (others.length === 1){
-
-        typing.textContent =
-          `${others[0].nickname}님이 입력 중...`;
-
-      }else{
-
-        typing.textContent =
-          `${others.length}명이 입력 중...`;
-
-      }
-
-    }else{
-
-      typing.textContent = "";
-
-    }
-
-  },1000);
-
-});
-
-
-/* =========================
    INPUT
 ========================= */
 
 function updateSendButton(){
 
   const input =
-    document.getElementById("messageInput");
+    document.getElementById(
+      "messageInput"
+    );
 
-  document.getElementById("sendButton")
-    .disabled =
-      !input.value.trim();
+  document.getElementById(
+    "sendButton"
+  ).disabled =
+    !currentUser ||
+    !input.value.trim();
 
 }
 
 
-window.handleInputKey = function(event){
+window.handleInputKey =
+function(event){
 
   if (
     event.key === "Enter" &&
@@ -2172,7 +2818,9 @@ window.handleInputKey = function(event){
 
 
 document
-  .getElementById("messageInput")
+  .getElementById(
+    "messageInput"
+  )
   .addEventListener(
     "input",
     updateSendButton
@@ -2183,11 +2831,26 @@ document
    EMOJI
 ========================= */
 
-window.toggleEmoji = function(){
+window.toggleEmoji =
+function(){
+
+  if (!currentUser){
+
+    alert(
+      "로그인 후 이모티콘을 사용할 수 있습니다."
+    );
+
+    return;
+
+  }
 
   document
-    .getElementById("emojiPanel")
-    .classList.toggle("show");
+    .getElementById(
+      "emojiPanel"
+    )
+    .classList.toggle(
+      "show"
+    );
 
 };
 
@@ -2196,32 +2859,45 @@ window.toggleEmoji = function(){
    NICKNAME
 ========================= */
 
-window.openNicknameModal = function(){
+window.openNicknameModal =
+function(){
 
-  closeModals();
-
-  document
-    .getElementById("nicknameInput")
-    .value = nickname;
+  if (!currentUser)
+    return;
 
   document
-    .getElementById("nicknameModal")
-    .classList.add("show");
+    .getElementById(
+      "nicknameInput"
+    ).value =
+      nickname;
+
+  document
+    .getElementById(
+      "nicknameModal"
+    )
+    .classList.add(
+      "show"
+    );
 
 };
 
 
-window.changeNickname = async function(){
+window.changeNickname =
+async function(){
 
   const newName =
     document
-      .getElementById("nicknameInput")
+      .getElementById(
+        "nicknameInput"
+      )
       .value
       .trim();
 
   if (!newName){
 
-    alert("닉네임을 입력해주세요.");
+    alert(
+      "닉네임을 입력해주세요."
+    );
 
     return;
 
@@ -2229,35 +2905,36 @@ window.changeNickname = async function(){
 
   if (newName.length > 12){
 
-    alert("닉네임은 12자 이하로 해주세요.");
+    alert(
+      "닉네임은 12자 이하로 해주세요."
+    );
 
     return;
 
   }
 
-  nickname = newName;
+  nickname =
+    newName;
 
   localStorage.setItem(
     "formwheel_chat_nickname",
     nickname
   );
 
-  document.getElementById("myNickname")
-    .textContent = nickname;
+  document.getElementById(
+    "myNickname"
+  ).textContent =
+    nickname;
 
-  if (currentUser){
-
-    await update(
-      ref(
-        db,
-        `chatUsers/${currentUser.uid}`
-      ),
-      {
-        nickname:nickname
-      }
-    );
-
-  }
+  await update(
+    ref(
+      db,
+      `chatUsers/${currentUser.uid}`
+    ),
+    {
+      nickname:nickname
+    }
+  );
 
   closeModals();
 
@@ -2268,7 +2945,8 @@ window.changeNickname = async function(){
    SEARCH
 ========================= */
 
-window.filterMessages = function(){
+window.filterMessages =
+function(){
 
   renderMessages();
 
@@ -2276,32 +2954,41 @@ window.filterMessages = function(){
 
 
 /* =========================
-   MODALS
+   MODAL
 ========================= */
 
-window.closeModals = function(){
+window.closeModals =
+function(){
 
   document
-    .querySelectorAll(".modal-bg")
+    .querySelectorAll(
+      ".modal-bg"
+    )
     .forEach(
       modal =>
-        modal.classList.remove("show")
+        modal.classList.remove(
+          "show"
+        )
     );
 
 };
 
 
 /* =========================
-   ACTIVE ITEM
+   ACTIVE
 ========================= */
 
 function clearActiveItems(){
 
   document
-    .querySelectorAll(".chat-item")
+    .querySelectorAll(
+      ".chat-item"
+    )
     .forEach(
       item =>
-        item.classList.remove("active")
+        item.classList.remove(
+          "active"
+        )
     );
 
 }
@@ -2314,31 +3001,44 @@ function clearActiveItems(){
 function escapeHtml(value){
 
   return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
 
 function formatTime(timestamp){
 
-  if (!timestamp){
-
+  if (!timestamp)
     return "";
-
-  }
 
   const date =
     new Date(timestamp);
 
-  if (isNaN(date.getTime())){
-
+  if (
+    isNaN(
+      date.getTime()
+    )
+  )
     return "";
-
-  }
 
   return date.toLocaleTimeString(
     "ko-KR",
@@ -2352,7 +3052,7 @@ function formatTime(timestamp){
 
 
 /* =========================
-   CLOSE EMOJI WHEN CLICK OUTSIDE
+   EMOJI OUTSIDE CLICK
 ========================= */
 
 document.addEventListener(
@@ -2360,17 +3060,25 @@ document.addEventListener(
   event => {
 
     const panel =
-      document.getElementById("emojiPanel");
+      document.getElementById(
+        "emojiPanel"
+      );
 
     const button =
-      event.target.closest(".icon-btn");
+      event.target.closest(
+        ".icon-btn"
+      );
 
     if (
-      !panel.contains(event.target) &&
+      !panel.contains(
+        event.target
+      ) &&
       !button
     ){
 
-      panel.classList.remove("show");
+      panel.classList.remove(
+        "show"
+      );
 
     }
 
