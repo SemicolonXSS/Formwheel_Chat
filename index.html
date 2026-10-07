@@ -2614,10 +2614,7 @@ function renderMessages(messages){
           ${
             isMe || currentUserData?.role === "producer"
             ? `
-              <button onclick="openEditMessage(
-                '${message.id}',
-                ${JSON.stringify(message.text || "").replaceAll("'", "&#39;")}
-              )">
+              <button data-message-action="edit" aria-label="메시지 수정">
                 ✏️
               </button>
             `
@@ -2627,7 +2624,7 @@ function renderMessages(messages){
           ${
             isMe || currentUserData?.role === "producer"
             ? `
-              <button onclick="deleteMessage('${message.id}')">
+              <button data-message-action="delete" aria-label="메시지 삭제">
                 🗑️
               </button>
             `
@@ -2638,10 +2635,7 @@ function renderMessages(messages){
             !isMe &&
             currentUserData?.role === "producer"
             ? `
-              <button onclick="openBanModal(
-                '${message.uid}',
-                ${JSON.stringify(message.nickname || "사용자").replaceAll("'", "&#39;")}
-              )">
+              <button data-message-action="ban" aria-label="사용자 차단">
                 🚫
               </button>
             `
@@ -2654,6 +2648,9 @@ function renderMessages(messages){
 
     `;
 
+    div.querySelector('[data-message-action="edit"]')?.addEventListener('click',()=>window.openEditMessage(message.id,message.text||""));
+    div.querySelector('[data-message-action="delete"]')?.addEventListener('click',()=>window.deleteMessage(message.id));
+    div.querySelector('[data-message-action="ban"]')?.addEventListener('click',()=>window.openBanModal(message.uid,message.nickname||"사용자"));
     container.insertBefore(div,previous?previous.nextSibling:container.firstChild);previous=div;messageNodes.set(message.id,{signature,node:div});
 
   });
