@@ -1352,7 +1352,8 @@ import {
   serverTimestamp,
   query,
   orderByChild,
-  limitToLast
+  limitToLast,
+  endAt
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
@@ -2428,10 +2429,21 @@ function stopMessageListeners(){
 }
 
 
+let messageCache=new Map(),messageNodes=new Map(),liveMessageIds=new Set(),historyMessageRef=null,messageGeneration=0;
+function sortedCachedMessages(){return [...messageCache.values()].sort((a,b)=>Number(a.createdAt)-Number(b.createdAt)||a.id.localeCompare(b.id));}
+async function loadEarlierMessages(){
+ if(!historyMessageRef||!messageCache.size)return;const generation=messageGeneration;
+ const oldest=sortedCachedMessages()[0],container=$("messages"),height=container.scrollHeight,top=container.scrollTop;
+ const button=$("earlierMessages");button.disabled=true;
+ try{const snap=await get(query(historyMessageRef,orderByChild("createdAt"),endAt(oldest.createdAt,oldest.id),limitToLast(51)));if(generation!==messageGeneration)return;
+ let count=0;snap.forEach(child=>{if(child.key===oldest.id)return;messageCache.set(child.key,{id:child.key,...child.val()});count++;});
+ renderMessages(sortedCachedMessages());container.scrollTop=top+container.scrollHeight-height;button.textContent=count?"이전 메시지 더 보기":"이전 메시지가 없습니다";button.disabled=count===0;
+ }catch{button.disabled=false;button.textContent="이전 메시지 불러오기 실패 · 다시 시도";}
+}
 function startMessageListener(pathName){
 
-  stopMessageListeners();
-
+  stopMessageListeners();messageGeneration++;messageCache.clear();messageNodes.clear();liveMessageIds.clear();
+  let earlier=$("earlierMessages");if(!earlier){earlier=document.createElement("button");earlier.id="earlierMessages";$("messages").before(earlier);}earlier.textContent="이전 메시지 보기";earlier.disabled=false;earlier.onclick=loadEarlierMessages;
   $("messages").innerHTML = "";
 
   const messageRef =
@@ -2442,6 +2454,7 @@ function startMessageListener(pathName){
       : `chatRooms/${currentRoomId}/messages`
     );
 
+  historyMessageRef=messageRef;
   const q =
     query(
       messageRef,
@@ -2465,7 +2478,10 @@ function startMessageListener(pathName){
 
         });
 
-        renderMessages(messages);
+        const ids=new Set(messages.map(m=>m.id));
+        const first=messages[0];for(const id of liveMessageIds)if(!ids.has(id)){const old=messageCache.get(id);if(!first||Number(old?.createdAt)>Number(first.createdAt)||Number(old?.createdAt)===Number(first.createdAt)&&id>=first.id)messageCache.delete(id);}
+        liveMessageIds=ids;for(const m of messages)messageCache.set(m.id,m);
+        renderMessages(sortedCachedMessages());
 
       }
     );
@@ -2510,10 +2526,16 @@ function renderMessages(messages){
     container.scrollTop -
     container.clientHeight < 100;
 
-  container.innerHTML = "";
+  const desired=new Set(messages.map(m=>m.id));
+  for(const [id,entry] of messageNodes)if(!desired.has(id)){entry.node.remove();messageNodes.delete(id);}
+  let previous=null;
 
 
   messages.forEach(message => {
+    const signature=JSON.stringify([message,allUsers[message.uid]?.role,currentUserData?.role]);
+    const existing=messageNodes.get(message.id);
+    if(existing?.signature===signature){if(existing.node.previousSibling!==previous)container.insertBefore(existing.node,previous?previous.nextSibling:container.firstChild);previous=existing.node;return;}
+    existing?.node.remove();
 
     if(message.system){
 
@@ -2526,7 +2548,7 @@ function renderMessages(messages){
       system.textContent =
         message.text || "";
 
-      container.appendChild(system);
+      container.insertBefore(system,previous?previous.nextSibling:container.firstChild);previous=system;messageNodes.set(message.id,{signature,node:system});
 
       return;
     }
@@ -2630,7 +2652,7 @@ function renderMessages(messages){
 
     `;
 
-    container.appendChild(div);
+    container.insertBefore(div,previous?previous.nextSibling:container.firstChild);previous=div;messageNodes.set(message.id,{signature,node:div});
 
   });
 
@@ -3740,3 +3762,4 @@ window.addEventListener(
 
 </body>
 </html>
+
