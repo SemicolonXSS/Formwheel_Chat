@@ -7,10 +7,8 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
   getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
+  signInAnonymously,
+  onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
@@ -68,7 +66,8 @@ let commandsUnsub = null;
 let editingMessageId = null;
 let banTargetUid = null;
 
-let authMode = "login";
+let nicknameReady = false;
+const NICKNAME_KEY = "formwheel_chat_nickname_v1";
 
 let allRooms = {};
 let allUsers = {};
@@ -229,125 +228,69 @@ function loadLocalData(){
 
 
 /* =========================================================
-   AUTH
+   NICKNAME ENTRY (Firebase anonymous auth keeps a secure uid)
 ========================================================= */
 
-window.switchAuth = function(mode){
-
-  authMode = mode;
-
-  $("loginTab").classList.toggle(
-    "active",
-    mode === "login"
-  );
-
-  $("signupTab").classList.toggle(
-    "active",
-    mode === "signup"
-  );
-
-  $("nicknameField").style.display =
-    mode === "signup" ? "block" : "none";
-
-  $("authButton").textContent =
-    mode === "signup" ? "회원가입" : "로그인";
-
-  $("authError").textContent = "";
-};
-
-
-window.submitAuth = async function(){
-
-  const email = $("emailInput").value.trim();
-  const password = $("passwordInput").value;
+window.submitNickname = async function(){
   const nickname = $("nicknameInput").value.trim();
+  const error = $("authError");
+  const button = $("authButton");
+  error.textContent = "";
 
-  $("authError").textContent = "";
-
-  if(!email || !password){
-
-    $("authError").textContent =
-      "이메일과 비밀번호를 입력해주세요.";
-
+  if(!nickname || nickname.length > 12 || /[\\u0000-\\u001f\\u007f]/.test(nickname)){
+    error.textContent = "닉네임은 1~12자로 입력해 주세요.";
     return;
   }
 
+  button.disabled = true;
   try{
-
-    if(authMode === "signup"){
-
-      if(!nickname){
-
-        $("authError").textContent =
-          "닉네임을 입력해주세요.";
-
-        return;
-      }
-
-      if(nickname.length > 12){
-
-        $("authError").textContent =
-          "닉네임은 최대 12자입니다.";
-
-        return;
-      }
-
-      const result =
-        await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
-      await set(
-        ref(db,`chatUsers/${result.user.uid}`),
-        {
-          uid:result.user.uid,
-          nickname:nickname,
-          email:email,
-          role:"member",
-          createdAt:Date.now()
-        }
-      );
-
-    }else{
-
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-    let message = "처리 중 오류가 발생했습니다.";
-
-    if(error.code === "auth/invalid-credential"){
-      message = "이메일 또는 비밀번호가 올바르지 않습니다.";
-    }
-
-    if(error.code === "auth/email-already-in-use"){
-      message = "이미 가입된 이메일입니다.";
-    }
-
-    if(error.code === "auth/weak-password"){
-      message = "비밀번호는 더 안전하게 설정해주세요.";
-    }
-
-    $("authError").textContent = message;
+    // Never overwrite an existing signed-in Formwheel account.
+    if(!auth.currentUser) await signInAnonymously(auth);
+    currentUser = auth.currentUser;
+    if(!currentUser) throw new Error("인증 세션을 만들 수 없습니다.");
+    const userRef = ref(db,`chatUsers/${currentUser.uid}`);
+    const snapshot = await get(userRef);
+    const previous = snapshot.val() || {};
+    await update(userRef,{
+      uid:currentUser.uid,
+      nickname,
+      role:previous.role || "member",
+      ...(snapshot.exists() ? {} : { createdAt:Date.now() })
+    });
+    localStorage.setItem(NICKNAME_KEY,nickname);
+    currentUserData = { ...previous,uid:currentUser.uid,nickname,role:previous.role || "member" };
+    nicknameReady = true;
+    await startChat();
+  }catch(e){
+    console.error("Chat nickname entry failed",e);
+    error.textContent = e?.code === "auth/operation-not-allowed"
+      ? "익명 인증이 비활성화되어 있습니다. 관리자에게 알려주세요."
+      : "채팅 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+  }finally{
+    button.disabled = false;
   }
 };
 
-
-window.logout = async function(){
-
-  await signOut(auth);
-
+window.changeNickname = function(){
+  nicknameReady = false;
+  $("nicknameInput").value = currentUserData?.nickname || localStorage.getItem(NICKNAME_KEY) || "";
+  $("authError").textContent = "";
+  $("loginScreen").style.display = "flex";
 };
+
+async function startChat(){
+  if(!currentUser || !nicknameReady)return;
+  if($("loginScreen").style.display === "none")return;
+  $("loginScreen").style.display = "none";
+  $("mainApp").style.display = "grid";
+  await loadCurrentUser();
+  loadLocalData();
+  await setOnline();
+  await loadUsers();
+  await loadRooms();
+  await loadCommands();
+  await restoreLastChat();
+}
 
 
 /* =========================================================
@@ -2341,50 +2284,27 @@ async function restoreLastChat(){
    AUTH STATE
 ========================================================= */
 
-onAuthStateChanged(
-  auth,
-  async user => {
-
-    currentUser = user;
-
-    if(!user){
-
-      $("loginScreen").style.display =
-        "flex";
-
-      $("mainApp").style.display =
-        "none";
-
-      stopMessageListeners();
-
-      return;
-
-    }
-
-
-    $("loginScreen").style.display =
-      "none";
-
-    $("mainApp").style.display =
-      "grid";
-
-
-    await loadCurrentUser();
-
-    loadLocalData();
-
-    await setOnline();
-
-    await loadUsers();
-
-    await loadRooms();
-
-    await loadCommands();
-
-    await restoreLastChat();
-
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  if(!user){
+    nicknameReady = false;
+    $("loginScreen").style.display = "flex";
+    $("mainApp").style.display = "none";
+    stopMessageListeners();
+    return;
   }
-);
+  const savedName = localStorage.getItem(NICKNAME_KEY);
+  if(savedName && !nicknameReady){
+    $("nicknameInput").value = savedName;
+    await window.submitNickname();
+  }else if(nicknameReady){
+    await startChat();
+  }else{
+    $("loginScreen").style.display = "flex";
+    $("mainApp").style.display = "none";
+  }
+});
+
 
 
 /* =========================================================
