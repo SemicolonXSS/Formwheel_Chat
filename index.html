@@ -35,7 +35,7 @@
 
 
   <!-- NICKNAME ENTRY -->
-  <section id="loginScreen" class="loginScreen">
+  <section id="loginScreen" class="loginScreen" aria-label="채팅 시작">
     <div class="loginCard">
       <div class="loginLogo">FormWheel Chat</div>
       <div class="loginSub">계정 가입 없이 닉네임으로 채팅하세요.</div>
@@ -48,7 +48,7 @@
         <button id="authButton" type="submit" class="primaryBtn">채팅 시작</button>
         <div id="authError" class="authError" role="alert"></div>
       </form>
-      <p style="text-align:center;color:#777;font-size:12px;line-height:1.5">
+      <p style="text-align:center;color:#666;font-size:12px;line-height:1.5">
         닉네임은 다른 사람과 중복될 수 있으며 본인 인증 수단이 아닙니다.
       </p>
     </div>
@@ -268,7 +268,7 @@
     </div>
 
     <div class="field">
-      <label>채팅방 이름</label>
+      <label for="createRoomName">채팅방 이름</label>
       <input id="createRoomName"
              maxlength="30"
              placeholder="예: 게임 이야기">
@@ -305,7 +305,7 @@
     </div>
 
     <div class="field">
-      <label>방 코드</label>
+      <label for="joinRoomCode">방 코드</label>
 
       <input
         id="joinRoomCode"
@@ -351,7 +351,7 @@
 
     <textarea
       id="editInput"
-      style="width:100%;min-height:110px;border:1px solid #ddd;border-radius:10px;padding:10px;resize:vertical;"></textarea>
+      style="width:100%;min-height:110px;border:1px solid #ddd;border-radius:10px;padding:10px;resize:vertical;" aria-label="수정할 메시지"></textarea>
 
     <div class="modalActions">
 
@@ -389,7 +389,7 @@
          style="font-size:14px;margin-bottom:15px;"></div>
 
     <div class="field">
-      <label>Ban 시간</label>
+      <label for="banMinutes">Ban 시간</label>
 
       <select id="banMinutes"
               style="width:100%;padding:10px;border:1px solid #ddd;border-radius:9px;">
@@ -436,21 +436,21 @@
     </div>
 
     <div class="field">
-      <label>명령어</label>
+      <label for="commandName">명령어</label>
       <input
         id="commandName"
         placeholder="@봇소환">
     </div>
 
     <div class="field">
-      <label>내용</label>
+      <label for="commandText">내용</label>
       <textarea
         id="commandText"
         style="width:100%;min-height:80px;border:1px solid #ddd;border-radius:9px;padding:10px;"></textarea>
     </div>
 
     <div class="field">
-      <label>동작</label>
+      <label for="commandAction">동작</label>
 
       <select
         id="commandAction"
